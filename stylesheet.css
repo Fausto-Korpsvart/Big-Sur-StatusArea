@@ -1,0 +1,52 @@
+/* Panel Indicators GNOME Shell extension
+ *
+ * Copyright (C) 2019 Leandro Vital <leavitals@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+.label-menu {
+    margin: 10px;
+    padding-left: 20px;
+}
+
+/* .datemenu-calendar-column {
+   border-left-width: 0;
+   border-right-width: 1px;
+   height: 23.0em;
+} */
+
+.remove-menubutton {
+    border-radius: 10px;
+    padding: 0px 4px;
+}
+
+.remove-menubutton:hover,
+.remove-menubutton:focus {
+    padding: 1px 5px;
+}
+
+.remove-menubutton>StIcon {
+    icon-size: 16px;
+}
+
+/* Message list */
+/* .message-list {
+    width: 22.5em;
+    max-height: 350px;
+} */
+
+.panel-status-menu-box>StIcon { 
+    icons-size: 16px; padding: 4px;
+}
