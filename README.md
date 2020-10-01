@@ -11,7 +11,7 @@ There are two ways to install the extension on your distro with Gnome Desktop; t
 
 ### Manual Installation
 
-To do a manual installation, all you have to do is download the extension from [Big Sur Status Area](https://www.pling.com/p/1427220/ "Big Sur Status Area on Gnome Look") and unzip the file to obtain a folder that you must move to the path: 
+To do a manual installation, all you have to do is download the extension from [Big Sur Status Area](https://www.pling.com/p/1427290/ "Big Sur Status Area on Gnome Look") and unzip the file to obtain a folder that you must move to the path: 
 
 `/.local/share/gnome-shell/extensions/`
 
