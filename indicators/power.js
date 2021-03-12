@@ -52,6 +52,7 @@ var PowerIndicator = new Lang.Class({
         Main.panel.statusArea.aggregateMenu.menu.box.remove_actor(this._brightness.menu.actor);
         this.menu.box.add_actor(this._brightness.menu.actor);
 
+        this._power.remove_actor(this._power._percentageLabel);
         Main.panel.statusArea.aggregateMenu.menu.box.remove_actor(this._power.menu.actor);
 
         this._separator = new PopupMenu.PopupSeparatorMenuItem();
