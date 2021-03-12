@@ -33,7 +33,7 @@ var PowerIndicator = new Lang.Class({
         this.parent("PowerIndicator");
         this.menu.actor.add_style_class_name("aggregate-menu");
         this._power = Main.panel.statusArea.aggregateMenu._power;
-        this._power.indicators.remove_actor(this._power._indicator);
+        this._power.remove_actor(this._power._indicator);
     
         this._brightness = Main.panel.statusArea.aggregateMenu._brightness;
         this._brightnessIcon = new St.Icon({
@@ -126,7 +126,7 @@ var PowerIndicator = new Lang.Class({
         this.box.remove_child(this._power._indicator);
         this.menu.box.remove_actor(this._brightness.menu.actor);
         
-        this._power.indicators.add_actor(this._power._indicator);
+        this._power.add_actor(this._power._indicator);
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._brightness.menu.actor);
 
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._power.menu.actor);

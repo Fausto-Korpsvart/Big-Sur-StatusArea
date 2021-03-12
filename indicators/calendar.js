@@ -34,7 +34,7 @@ var CalendarIndicator = new Lang.Class({
         this._clock = Main.panel.statusArea.dateMenu._clock;
         this._calendar = Main.panel.statusArea.dateMenu._calendar;
         this._date = Main.panel.statusArea.dateMenu._date;
-        this._eventsSection = new imports.ui.calendar.EventsSection();
+        // this._eventsSection = new imports.ui.calendar.EventsSection();
         this._clocksSection = Main.panel.statusArea.dateMenu._clocksItem;
         this._weatherSection = Main.panel.statusArea.dateMenu._weatherItem;
         this._clockIndicator = Main.panel.statusArea.dateMenu._clockDisplay;
@@ -45,14 +45,14 @@ var CalendarIndicator = new Lang.Class({
         });
 
         this._indicatorParent = this._clockIndicator.get_parent();
-        this._calendarParent = this._calendar.actor.get_parent();
-        this._sectionParent = this._clocksSection.actor.get_parent();
+        this._calendarParent = this._calendar.get_parent();
+        this._sectionParent = this._clocksSection.get_parent();
 
         this._indicatorParent.remove_actor(this._clockIndicator);
-        this._calendarParent.remove_child(this._calendar.actor);
-        this._calendarParent.remove_child(this._date.actor);
-        this._sectionParent.remove_child(this._clocksSection.actor);
-        this._sectionParent.remove_child(this._weatherSection.actor);
+        this._calendarParent.remove_child(this._calendar);
+        this._calendarParent.remove_child(this._date);
+        this._sectionParent.remove_child(this._clocksSection);
+        this._sectionParent.remove_child(this._weatherSection);
 
         this.box.add_actor(this._clockIndicator);
         this.box.add_actor(this._clockIndicatorFormat);
@@ -62,7 +62,7 @@ var CalendarIndicator = new Lang.Class({
 
         hbox = new St.BoxLayout({ name: 'calendarArea' });
 
-        boxLayout = new imports.ui.dateMenu.CalendarColumnLayout(this._calendar.actor);
+        boxLayout = new imports.ui.dateMenu.CalendarColumnLayout(this._calendar);
         vbox = new St.Widget({
             style_class: "datemenu-calendar-column",
             layout_manager: boxLayout
@@ -72,7 +72,6 @@ var CalendarIndicator = new Lang.Class({
         let  displaySection = new St.ScrollView({
             style_class: "datemenu-displays-section vfade",
             x_expand: true,
-            x_fill: true,
             overlay_scrollbars: true
         });
 
@@ -83,17 +82,13 @@ var CalendarIndicator = new Lang.Class({
 
         displaySection.set_policy(St.PolicyType.NEVER, St.PolicyType.AUTOMATIC);
 
-        vbox.add_actor(this._date.actor);
-        vbox.add_actor(this._calendar.actor);
-        dbox.add(this._eventsSection.actor, {
+        vbox.add_actor(this._date);
+        vbox.add_actor(this._calendar);
+        /*dbox.add(this._eventsSection.actor, {
             x_fill: true
-        });
-        dbox.add(this._clocksSection.actor, {
-            x_fill: true
-        });
-        dbox.add(this._weatherSection.actor, {
-            x_fill: true
-        });
+        });*/
+        dbox.add_actor(this._clocksSection);
+        dbox.add_actor(this._weatherSection);
 
         displaySection.add_actor(dbox);
         vbox.add_actor(displaySection);
@@ -103,14 +98,14 @@ var CalendarIndicator = new Lang.Class({
             if (isOpen) {
                 let now = new Date();
                 this._calendar.setDate(now);
-                this._eventsSection.setDate(now);
+                //this._eventsSection.setDate(now);
                 this._date.setDate(now);
             }
         });
         this._date_changed = this._calendar.connect(
             "selected-date-changed",
             (calendar, date) => {
-                this._eventsSection.setDate(date);
+                // this._eventsSection.setDate(date);
             }
         );
     },
@@ -150,15 +145,15 @@ var CalendarIndicator = new Lang.Class({
         
         this.box.remove_child(this._clockIndicator);
 
-        this._date.actor.get_parent().remove_child(this._date.actor);
-        this._calendar.actor.get_parent().remove_child(this._calendar.actor);
-        this._clocksSection.actor.get_parent().remove_child(this._clocksSection.actor);
-        this._weatherSection.actor.get_parent().remove_child(this._weatherSection.actor);
+        this._date.get_parent().remove_child(this._date);
+        this._calendar.get_parent().remove_child(this._calendar);
+        this._clocksSection.get_parent().remove_child(this._clocksSection);
+        this._weatherSection.get_parent().remove_child(this._weatherSection);
       
-        this._calendarParent.add_child(this._date.actor);
-        this._sectionParent.add_child(this._clocksSection.actor);
-        this._sectionParent.add_child(this._weatherSection.actor);
-        this._calendarParent.add_child(this._calendar.actor);
+        this._calendarParent.add_child(this._date);
+        this._sectionParent.add_child(this._clocksSection);
+        this._sectionParent.add_child(this._weatherSection);
+        this._calendarParent.add_child(this._calendar);
 
         this._indicatorParent.add_actor(this._clockIndicator);
 
