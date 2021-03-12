@@ -65,39 +65,38 @@ var CalendarIndicator = new Lang.Class({
         boxLayout = new imports.ui.dateMenu.CalendarColumnLayout(this._calendar);
         vbox = new St.Widget({
             style_class: "datemenu-calendar-column",
-            x_expand: true,
             layout_manager: boxLayout
         });
         boxLayout.hookup_style(vbox);
 
         let  displaySection = new St.ScrollView({
             style_class: "datemenu-displays-section vfade",
-            x_expand: false,
+            clip_to_allocation: true,
+	    x_expand: true,
             overlay_scrollbars: true
         });
 
         let dbox = new St.BoxLayout({
             vertical: true,
-            x_expand: false,
             style_class: "datemenu-displays-box"
         });
 
         displaySection.set_policy(St.PolicyType.NEVER, St.PolicyType.AUTOMATIC);
 
-        vbox.add_actor(this._date);
-        vbox.add_actor(this._calendar);
-        dbox.add_actor(this._eventsSection, {
-            x_expand: false
+        vbox.add_child(this._date);
+        vbox.add_child(this._calendar);
+        dbox.add_child(this._eventsSection, {
+            x_fill: true
         });
-        dbox.add_actor(this._clocksSection, {
-	    x_expand: false
+        dbox.add_child(this._clocksSection, {
+	    x_fill: true
 	});
-        dbox.add_actor(this._weatherSection, {
-	    x_expand: false
+        dbox.add_child(this._weatherSection, {
+	    x_fill: true
 	});
 
-        displaySection.add_actor(dbox);
-        vbox.add_actor(displaySection);
+        displaySection.add_child(dbox);
+        vbox.add_child(displaySection);
         this.menu.box.add(vbox);
 
         this.menu.connect("open-state-changed", (menu, isOpen) => {
