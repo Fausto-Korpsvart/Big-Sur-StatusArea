@@ -34,7 +34,7 @@ var CalendarIndicator = new Lang.Class({
         this._clock = Main.panel.statusArea.dateMenu._clock;
         this._calendar = Main.panel.statusArea.dateMenu._calendar;
         this._date = Main.panel.statusArea.dateMenu._date;
-        // this._eventsSection = new imports.ui.calendar.EventsSection();
+        this._eventsSection = new imports.ui.dateMenu.EventsSection();
         this._clocksSection = Main.panel.statusArea.dateMenu._clocksItem;
         this._weatherSection = Main.panel.statusArea.dateMenu._weatherItem;
         this._clockIndicator = Main.panel.statusArea.dateMenu._clockDisplay;
@@ -65,18 +65,20 @@ var CalendarIndicator = new Lang.Class({
         boxLayout = new imports.ui.dateMenu.CalendarColumnLayout(this._calendar);
         vbox = new St.Widget({
             style_class: "datemenu-calendar-column",
+            x_expand: true,
             layout_manager: boxLayout
         });
         boxLayout.hookup_style(vbox);
 
         let  displaySection = new St.ScrollView({
             style_class: "datemenu-displays-section vfade",
-            x_expand: true,
+            x_expand: false,
             overlay_scrollbars: true
         });
 
         let dbox = new St.BoxLayout({
             vertical: true,
+            x_expand: false,
             style_class: "datemenu-displays-box"
         });
 
@@ -84,11 +86,15 @@ var CalendarIndicator = new Lang.Class({
 
         vbox.add_actor(this._date);
         vbox.add_actor(this._calendar);
-        /*dbox.add(this._eventsSection.actor, {
-            x_fill: true
-        });*/
-        dbox.add_actor(this._clocksSection);
-        dbox.add_actor(this._weatherSection);
+        dbox.add_actor(this._eventsSection, {
+            x_expand: false
+        });
+        dbox.add_actor(this._clocksSection, {
+	    x_expand: false
+	});
+        dbox.add_actor(this._weatherSection, {
+	    x_expand: false
+	});
 
         displaySection.add_actor(dbox);
         vbox.add_actor(displaySection);
@@ -98,14 +104,14 @@ var CalendarIndicator = new Lang.Class({
             if (isOpen) {
                 let now = new Date();
                 this._calendar.setDate(now);
-                //this._eventsSection.setDate(now);
+                this._eventsSection.setDate(now);
                 this._date.setDate(now);
             }
         });
         this._date_changed = this._calendar.connect(
             "selected-date-changed",
             (calendar, date) => {
-                // this._eventsSection.setDate(date);
+                this._eventsSection.setDate(date);
             }
         );
     },
