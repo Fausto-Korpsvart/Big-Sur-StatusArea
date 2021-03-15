@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const { St, Gtk, GLib, Clutter, Gio } = imports.gi;
+const { St, Gtk, GLib, Clutter, Gio, Shell } = imports.gi;
 const Lang = imports.lang;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
@@ -40,6 +40,7 @@ var CalendarIndicator = new Lang.Class({
         this._clockIndicator = Main.panel.statusArea.dateMenu._clockDisplay;
 
         this._clockIndicatorFormat = new St.Label({
+            style_class: "clock-display",
             visible: false,
             y_align: Clutter.ActorAlign.CENTER
         });
@@ -50,7 +51,7 @@ var CalendarIndicator = new Lang.Class({
 
         this._indicatorParent.remove_actor(this._clockIndicator);
         this._calendarParent.remove_child(this._calendar);
-        this._calendarParent.remove_child(this._date);
+        this._indicatorParent.remove_child(this._date);
         this._sectionParent.remove_child(this._clocksSection);
         this._sectionParent.remove_child(this._weatherSection);
 
@@ -62,42 +63,41 @@ var CalendarIndicator = new Lang.Class({
 
         hbox = new St.BoxLayout({ name: 'calendarArea' });
 
-        boxLayout = new imports.ui.dateMenu.CalendarColumnLayout(this._calendar);
-        vbox = new St.Widget({
-            style_class: "datemenu-calendar-column",
-            layout_manager: boxLayout
-        });
+        // Fill up the second column
+        boxLayout = new imports.ui.dateMenu.CalendarColumnLayout([this._calendar, this._date]);
+        vbox = new St.Widget({ style_class: 'datemenu-calendar-column',
+                               layout_manager: boxLayout });
         boxLayout.hookup_style(vbox);
+        hbox.add(vbox)
 
-        let  displaySection = new St.ScrollView({
+        let _dateLabel = new St.Label({ style_class: 'date-label' });
+        vbox.add_actor(_dateLabel);
+        let now = new Date();
+        let dateFormat = Shell.util_translate_time_string(N_("%B %-d %Y"));
+        _dateLabel.set_text(now.toLocaleFormat(dateFormat));
+
+        this._displaysSection = new St.ScrollView({
             style_class: "datemenu-displays-section vfade",
             clip_to_allocation: true,
 	    x_expand: true,
-            overlay_scrollbars: true
         });
 
-        let dbox = new St.BoxLayout({
+        this._displaysSection.set_policy(St.PolicyType.NEVER, St.PolicyType.EXTERNAL);
+        vbox.add_child(this._displaysSection);
+
+        let displayBox = new St.BoxLayout({
             vertical: true,
+	    x_expand: true,
             style_class: "datemenu-displays-box"
         });
-
-        displaySection.set_policy(St.PolicyType.NEVER, St.PolicyType.AUTOMATIC);
-
+        displayBox.add_child(this._eventsSection);
+        displayBox.add_child(this._clocksSection);
+        displayBox.add_child(this._weatherSection);
+        this._displaysSection.add_actor(displayBox);
         vbox.add_child(this._date);
         vbox.add_child(this._calendar);
-        dbox.add_child(this._eventsSection, {
-            x_fill: true
-        });
-        dbox.add_child(this._clocksSection, {
-	    x_fill: true
-	});
-        dbox.add_child(this._weatherSection, {
-	    x_fill: true
-	});
 
-        displaySection.add_child(dbox);
-        vbox.add_child(displaySection);
-        this.menu.box.add(vbox);
+        this.menu.box.add(hbox);
 
         this.menu.connect("open-state-changed", (menu, isOpen) => {
             if (isOpen) {
