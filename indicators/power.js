@@ -35,22 +35,14 @@ var PowerIndicator = new Lang.Class({
         this._power = Main.panel.statusArea.aggregateMenu._power;
         this._power.remove_actor(this._power._indicator);
     
-        this._brightness = Main.panel.statusArea.aggregateMenu._brightness;
-        this._brightnessIcon = new St.Icon({
-            icon_name: "display-brightness-symbolic",
-            style_class: "system-status-icon"
-        });
         this._percentageLabel = new St.Label({
             text: "",
             y_expand: true,
             y_align: Clutter.ActorAlign.CENTER,
             visible: false
         });
-        this.box.add_child(this._brightnessIcon);
         this.box.add_child(this._power._indicator);
         this.box.add_child(this._percentageLabel);
-        Main.panel.statusArea.aggregateMenu.menu.box.remove_actor(this._brightness.menu.actor);
-        this.menu.box.add_actor(this._brightness.menu.actor);
 
         this._power.remove_actor(this._power._percentageLabel);
         Main.panel.statusArea.aggregateMenu.menu.box.remove_actor(this._power.menu.actor);
@@ -72,8 +64,6 @@ var PowerIndicator = new Lang.Class({
     _sync: function () {
         let powertype = this._power._proxy.IsPresent;
         if (!powertype) {
-            this._brightnessIcon.show();
-            this._brightness.menu.actor.show();
             this._power._indicator.hide();
             this._percentageLabel.hide();
             this._separator.actor.hide();
@@ -83,9 +73,7 @@ var PowerIndicator = new Lang.Class({
             this.hide();
             
         } else {
-            this._brightnessIcon.hide();
             this._power._indicator.show();
-            this._brightness.menu.actor.show();
             this._percentageLabel.visible = this._power._desktopSettings.get_boolean("show-battery-percentage");
             this._percentageLabel.clutter_text.set_markup('<span size="smaller">' + this._power._proxy.Percentage + " %</span>");
             this._separator.actor.show();
@@ -125,10 +113,8 @@ var PowerIndicator = new Lang.Class({
         this._power._desktopSettings.disconnect(this._show_battery_signal);
 
         this.box.remove_child(this._power._indicator);
-        this.menu.box.remove_actor(this._brightness.menu.actor);
         
         this._power.add_actor(this._power._indicator);
-        Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._brightness.menu.actor);
 
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._power.menu.actor);
         
