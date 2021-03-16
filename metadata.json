@@ -4,9 +4,10 @@
   "name": "Big Sur Status Area",
   "shell-version": [
     "3.34",
-    "3.36"
+    "3.36",
+    "3.38"
   ],
-  "url": "https://github.com/Fausto-Korpsvart/Big-Sur-StatusArea",
-  "uuid": "bigSur-StatusArea@korpsvart",
-  "version": 1
+  "url": "https://github.com/Ordissimo/Big-Sur-StatusArea",
+  "uuid": "bigSur-StatusArea@ordissomo",
+  "version": 1.1
 }
