@@ -49,8 +49,7 @@ var UserIndicator = new Lang.Class({
         });
 
         this._power_gicon = Gio.icon_new_for_string(`${Me.path}/icons/system-shutdown-symbolic.svg`);
-        this._powerIcon = new St.Icon({ gicon: this._power_gicon });
-        this._powerIcon.icon_size = PANEL_ICON_SIZE;
+        this._powerIcon = new St.Icon({ gicon: this._power_gicon, style_class: "system-status-icon"});
 
         if (this._screencast)
              this.box.add_child(this._screencast);

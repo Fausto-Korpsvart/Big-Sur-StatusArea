@@ -27,8 +27,6 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 
-var PANEL_ICON_SIZE = 16;
-
 var BluetoothIndicator = new Lang.Class({
     Name: "BluetoothIndicator",
     Extends: CustomButton,
@@ -57,9 +55,8 @@ var BluetoothIndicator = new Lang.Class({
         this._bluetooth._indicator.hide();
         this._bluetooth._item.menu._setSettingsVisibility(false);
 
-        this._indicator = new St.Icon();
+        this._indicator = new St.Icon({style_class: "system-status-icon"});
         this._indicator.gicon = this._bluetooth_active_gicon;
-        this._indicator.icon_size = PANEL_ICON_SIZE;
 
         this.box.add_child(this._indicator);
       
