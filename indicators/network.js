@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const { Clutter, GLib, GObject, St } = imports.gi;
+const { St } = imports.gi;
 const Lang = imports.lang;
 const Main = imports.ui.main;
 const Config = imports.misc.config;
@@ -26,16 +26,13 @@ const _ = Gettext.gettext;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 
-const Rfkill = imports.ui.status.rfkill;
-const Util = imports.misc.util;
-const Mainloop = imports.mainloop;
-
 var NetworkIndicator = new Lang.Class({
     Name: "NetworkIndicator",
     Extends: CustomButton,
 
-    _init: function (src) {
+    _init: function () {
         this.parent("NetworkIndicator");
+        //this.menu.box.set_width(270);
         this.menu.actor.add_style_class_name("aggregate-menu");
 
         this._network = null;
@@ -46,21 +43,20 @@ var NetworkIndicator = new Lang.Class({
         }
 
         this._location = Main.panel.statusArea.aggregateMenu._location;
-        this._location.indicators.remove_actor(this._location._indicator);
-        this.box.add_child(this._location._indicator);
-        this._location._indicator.hide();
-
-        if (this._network) {
-            this._network.indicators.remove_actor(this._network._primaryIndicator);
-            this._network.indicators.remove_actor(this._network._vpnIndicator);
-            this.box.add_child(this._network._primaryIndicator);
-            this.box.add_child(this._network._vpnIndicator);
-            this._network._primaryIndicator.hide();
-            this._network._vpnIndicator.hide();            
+        if(this._location._indicator){
+            this._location.remove_actor(this._location._indicator);
+            this._location._indicator.hide();
         }
 
-        this._rfkill.indicators.remove_actor(this._rfkill._indicator);
-        this.box.add_child(this._rfkill._indicator);
+        if (this._network) {
+            this._network.remove_actor(this._network._primaryIndicator);
+            this._network.remove_actor(this._network._vpnIndicator);
+            this.box.add_child(this._network._primaryIndicator);
+            this.box.add_child(this._network._vpnIndicator);
+            this._network._vpnIndicator.hide();
+        }
+
+        this._rfkill.remove_actor(this._rfkill._indicator);
         this._rfkill._indicator.hide();
 
         this._arrowIcon = new St.Icon({
@@ -97,7 +93,7 @@ var NetworkIndicator = new Lang.Class({
         this._sync();
 
         Main.sessionMode.connect('updated', () => this._sync());
-        
+
     },
     _sync: function () {
         this._arrowIcon.hide();
@@ -128,21 +124,21 @@ var NetworkIndicator = new Lang.Class({
         this.box.remove_child(this._location._indicator);
         this.menu.box.remove_actor(this._location.menu.actor);
 
-        this._location.indicators.add_actor(this._location._indicator);
+        this._location.add_actor(this._location._indicator);
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._location.menu.actor);
 
         this.box.remove_child(this._rfkill._indicator);
         this.menu.box.remove_actor(this._rfkill.menu.actor);
 
-        this._rfkill.indicators.add_actor(this._rfkill._indicator);
+        this._rfkill.add_actor(this._rfkill._indicator);
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._rfkill.menu.actor);
 
         this.box.remove_child(this._network._primaryIndicator);
         this.box.remove_child(this._network._vpnIndicator);
         this.menu.box.remove_actor(this._network.menu.actor);
 
-        this._network.indicators.add_actor(this._network._primaryIndicator);
-        this._network.indicators.add_actor(this._network._vpnIndicator);
+        this._network.add_actor(this._network._primaryIndicator);
+        this._network.add_actor(this._network._vpnIndicator);
         
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._network.menu.actor);
 

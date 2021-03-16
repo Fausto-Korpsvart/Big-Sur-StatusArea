@@ -18,7 +18,7 @@
             <summary>MPRIS2 Capable Media Players</summary>
         </key>
         <key name="items" type="s">
-            <default>"Calendar;1;1;calendar|Night Light;1;0;nightlight|Volume;1;0;volume|Network;1;0;network|Bluetooth;1;0;bluetooth|Power (Brightness);1;0;power|Notification;1;0;notification|User;1;0;user"</default>
+            <default>"Calendar;1;1;calendar|Light;1;0;light|Night Light;1;0;nightlight|Volume;1;0;volume|Network;1;0;network|Bluetooth;1;0;bluetooth|Power (Brightness);1;0;power|Notification;1;0;notification|User;1;0;user"</default>
             <summary>Indicators</summary>
         </key>
     </schema>
