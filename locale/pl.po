@@ -1,0 +1,201 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-15 18:04-0800\n"
+"PO-Revision-Date: 2019-12-12 20:21+0100\n"
+"Language-Team: Piotr Komur, pkomur@gmail.com\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.4\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Language: pl\n"
+
+#: ../prefs.js:184
+msgid "Settings"
+msgstr "Ustawienia"
+
+#: ../prefs.js:193
+msgid "User/System Indicator"
+msgstr "Wskaźnik systemu/użytkownika"
+
+#: ../prefs.js:197
+msgid "Show an icon instead of name"
+msgstr "Pokaż ikonę zamiast nazwy"
+
+#: ../prefs.js:214
+msgid "Calendar Indicator"
+msgstr "Wskaźnik kalendarza"
+
+#: ../prefs.js:218
+msgid "Change date format"
+msgstr "Zmień format daty"
+
+#: ../prefs.js:251
+msgid "Power Indicator"
+msgstr "Wskaźnik zasilania"
+
+#: ../prefs.js:255
+msgid "Show battery percentage"
+msgstr "Pokaż procent naładowania akumulatora"
+
+#: ../prefs.js:279
+msgid "Position and size"
+msgstr "Położenie i rozmiar"
+
+#: ../prefs.js:283
+msgid "Indicators spacing"
+msgstr "Odległości między wskaźnikami"
+
+#: ../prefs.js:333
+msgid "Indicators Order"
+msgstr "Kolejność wskaźników"
+
+#: ../prefs.js:353
+msgid "Left"
+msgstr "Z lewej"
+
+#: ../prefs.js:354
+msgid "Center"
+msgstr "Po środku"
+
+#: ../prefs.js:407
+msgid "Top to bottom -> Left to right"
+msgstr "Z góry na dół -> z lewej do prawej"
+
+#: ../prefs.js:412
+msgid "Reset Indicators"
+msgstr "Resetowanie wskaźników"
+
+#: ../prefs.js:418
+msgid "Reset"
+msgstr "Resetuj"
+
+#: ../prefs.js:455
+msgid "About"
+msgstr "O programie"
+
+#: ../prefs.js:487
+msgid "Version: "
+msgstr "Wersja:"
+
+#: ../prefs.js:496
+msgid "If something breaks, don't hesitate to leave a comment at "
+msgstr "W razie problemów proszę o komentarz na:"
+
+#: ../prefs.js:500
+msgid "Webpage/Github"
+msgstr "Github"
+
+#: ../prefs.js:511
+msgid "This extension is a fork of Extend Panel Menu, thanks to julio641742"
+msgstr ""
+"To rozszerzenie powstało na podstawie 'Extend Panel Menu'.\n"
+"Podziękowania dla julio641742."
+
+#: ../indicators/calendar.js:100
+msgid "No Events"
+msgstr "Brak zdarzeń"
+
+#: ../indicators/calendar.js:128
+msgid "Date Time Settings"
+msgstr "Ustawienia daty i czasu"
+
+#: ../indicators/network.js:95
+msgid "Network Settings"
+msgstr "Ustawienia sieci"
+
+#: ../indicators/nightlight.js:67
+msgid "Temperature"
+msgstr "Temperatura"
+
+#: ../indicators/nightlight.js:83 ../indicators/nightlight.js:126
+msgid "Resume"
+msgstr "Wznów"
+
+#: ../indicators/nightlight.js:86 ../indicators/nightlight.js:122
+msgid "Turn Off"
+msgstr "Wyłącz"
+
+#: ../indicators/nightlight.js:89
+msgid "Display Settings"
+msgstr "Ustawienia ekranu"
+
+#: ../indicators/nightlight.js:122
+msgid "Turn On"
+msgstr "Włącz"
+
+#: ../indicators/nightlight.js:125
+msgid "Night Light Disabled"
+msgstr "Nocne wyświetlanie wyłączone"
+
+#: ../indicators/nightlight.js:125
+msgid "Night Light On"
+msgstr "Nocne wyświetlanie włączone"
+
+#: ../indicators/nightlight.js:126
+msgid "Disable Until Tomorrow"
+msgstr "Wyłącz do jutra"
+
+#: ../indicators/power.js:59
+msgid "Power Settings"
+msgstr "Ustawienia zasilania"
+
+#: ../indicators/system.js:73
+msgid "Log Out"
+msgstr "Wyloguj się"
+
+#: ../indicators/system.js:80
+msgid "Account Settings"
+msgstr "Ustawienia konta"
+
+#: ../indicators/system.js:91
+msgid "System Settings"
+msgstr "Ustawienia systemu"
+
+#: ../indicators/system.js:111
+msgid "Lock"
+msgstr "Zablokuj"
+
+#: ../indicators/system.js:133
+msgid "Switch User"
+msgstr "Przełącz użytkownika"
+
+#: ../indicators/system.js:156
+msgid "Orientation Lock"
+msgstr "Zablokuj obracanie"
+
+#: ../indicators/system.js:177
+msgid "Suspend"
+msgstr "Wstrzymaj"
+
+#: ../indicators/system.js:198
+msgid "Power Off"
+msgstr "Wyłącz"
+
+#: ../indicators/volume.js:66
+msgid "Volume Settings"
+msgstr "Ustawienia dźwięku"
+
+#: schemas.xml
+msgid "Night Light Indicator"
+msgstr "Wskaźnik nocnego wyświetlania"
+
+msgid "Volume Indicator"
+msgstr "Wskaźnik głośności"
+
+msgid "Network Indicator"
+msgstr "Wskaźnik sieci"
+
+msgid "Power (Brightness) Indicator"
+msgstr "Wskaźnik jasności"
+
+msgid "User Indicator"
+msgstr "Wskaźnik użytkownika"

@@ -36,7 +36,7 @@ const UserIndicator = Me.imports.indicators.system.UserIndicator;
 const VolumeIndicator = Me.imports.indicators.volume.VolumeIndicator;
 
 function init() {
-    Convenience.initTranslations("panel-indicators");
+    Convenience.initTranslations("bigSur-StatusArea");
 }
 
 let settings;

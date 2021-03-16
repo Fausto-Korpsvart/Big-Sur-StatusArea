@@ -21,7 +21,7 @@ const Gtk = imports.gi.Gtk;
 const GLib = imports.gi.GLib;
 const GObject = imports.gi.GObject;
 const GdkPixbuf = imports.gi.GdkPixbuf;
-const Gettext = imports.gettext.domain("panel-indicators");
+const Gettext = imports.gettext.domain("bigSur-StatusArea");
 const _ = Gettext.gettext;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
@@ -32,7 +32,7 @@ const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const MenuItems = Extension.imports.menuItems;
 
 function init() {
-    Convenience.initTranslations("panel-indicators");
+    Convenience.initTranslations("bigSur-StatusArea");
 }
 
 const IconButton = new GObject.Class({

@@ -1,34 +1,46 @@
-# Big Sur Status Area
+# Panel Indicators
 
-### This is a fork of __[panel-indicators](https://github.com/lvitals/panel-indicators "lvitals Repository")__ y __[panel-indicator](https://github.com/lenuswalker/panel-indicators "lenuswalker Repository")__ that I have modified to bring the macOS Big Sur "System Tray" look to Gnome, moving the Gnome panel icons to the "Status Area", separating the icons and giving a better appearance to the Gnome Shell. This is still a work in progress, so I will be adding new things over time.
+## What  is it
 
+A GNOME Shell extension for move the Power/Network/Volume/User/Date/Notifications menus to the status area.
 
+## Requirements
 
-## INSTALLATION
+* GNOME Shell >= 3.30
 
+## How to contribute
 
-There are two ways to install the extension on your distro with Gnome Desktop; the first is manually, the second, and easier, is the installation from the official page of [Gnome Extensions](https://extensions.gnome.org/)
+* Download the code
+* Build with Meson (see at the next section)
+* Log out & log in from your user session. Alternatively, just restart the computer.
+* Activate the extension in GNOME Tweaks
 
-### Manual Installation
+## Build with Meson
 
-To do a manual installation, all you have to do is download the extension from [Big Sur Status Area](https://www.pling.com/p/1427290/ "Big Sur Status Area on Gnome Look") and unzip the file to obtain a folder that you must move to the path: 
+The project uses a build system called [Meson](https://mesonbuild.com/). You can install
+in most Linux distributions as "meson".
 
-`/.local/share/gnome-shell/extensions/`
+It's possible to read more information in the Meson docs to tweak the configuration if needed.
 
-To see the `/.local/` folder you need to access the hidden files and for that you must first press the `"ctrl + h"` keys or go to the Nautilus menu and check the `Show Hidden Files` box.
+For a regular use and local development these are the steps to build the
+project and install it:
 
+```bash
+meson --prefix=$HOME/.local/ --localedir=share/gnome-shell/extensions/panel-indicators@leavitals/locale .build
+ninja -C .build install
+```
 
-### Installation from Gnome Extensions (SOON...!)
+It is strongly recommended to delete the destination folder
+($HOME/.local/share/gnome-shell/extensions/panel-indicators@leavitals) before doing this, to ensure that no old
+data is kept.
 
-To install from the Gnome Extensions page, go to the following link: [Big Sur Status Area](https://extensions.gnome.org/ "Big Sur Status Area on Gnome Extensions") and turn on the extension, then confirm the installation and voila, you already have the Big Sur Status Area in Gnome Desktop.
+## Export extension ZIP file for extensions.gnome.org
 
+To create a ZIP file with the extension, just run:
 
-### CONFIGURING THE EXTENSION
+```bash
+./export-zip.sh
+```
 
-To achieve the Big Sur look with the Big Sur Status Area extension, go to Settings and then to `"Position and size"`, check the `"Calendar" to be moved to the left`, then follow the following order from bottom to top : `Calendar, User, Notification, Volume, Network, Night Light, Bluetooth, Power (Brightness).`
-Then go to the `"Settings"` tab and paste the following time format for the clock: `% a% b% d% H:% M% p.`
-
-You can also choose to show the battery percentage in case of being a Laptop, obviously; it can also display username instead of icon on panel.
-
-
-## I hope you enjoy this extension on your top panel and all its functions are useful in your everyday work };-]
+This will create the file `panel-indicators@leavitals.zip` with the extension, following the rules for publishing
+at extensions.gnome.org.

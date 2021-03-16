@@ -1,0 +1,209 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-15 18:04-0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../prefs.js:184
+msgid "Settings"
+msgstr ""
+
+#: ../prefs.js:193
+msgid "User/System Indicator"
+msgstr ""
+
+#: ../prefs.js:197
+msgid "Show an icon instead of name"
+msgstr ""
+
+#: ../prefs.js:214
+msgid "Calendar Indicator"
+msgstr ""
+
+#: ../prefs.js:218
+msgid "Change date format"
+msgstr ""
+
+#: ../prefs.js:251
+msgid "Power Indicator"
+msgstr ""
+
+#: ../prefs.js:255
+msgid "Show battery percentage"
+msgstr ""
+
+#: ../prefs.js:279
+msgid "Position and size"
+msgstr ""
+
+#: ../prefs.js:283
+msgid "Indicators spacing"
+msgstr ""
+
+#: ../prefs.js:330
+msgid "Indicators Order"
+msgstr ""
+
+#: ../prefs.js:350
+msgid "Left"
+msgstr ""
+
+#: ../prefs.js:351
+msgid "Center"
+msgstr ""
+
+#: ../prefs.js:404
+msgid "Top to bottom -> Left to right"
+msgstr ""
+
+#: ../prefs.js:409
+msgid "Reset Indicators"
+msgstr ""
+
+#: ../prefs.js:415
+msgid "Reset"
+msgstr ""
+
+#: ../prefs.js:452
+msgid "About"
+msgstr ""
+
+#: ../prefs.js:484
+msgid "Version: "
+msgstr ""
+
+#: ../prefs.js:493
+msgid "If something breaks, don't hesitate to leave a comment at "
+msgstr ""
+
+#: ../prefs.js:497
+msgid "Webpage/Github"
+msgstr ""
+
+#: ../prefs.js:508
+msgid "This extension is a fork of Extend Panel Menu, thanks to julio641742"
+msgstr ""
+
+#: ../indicators/bluetooth.js:70
+msgid "Bluetooth Settings"
+msgstr ""
+
+#: ../indicators/calendar.js:101
+msgid "No Events"
+msgstr ""
+
+#: ../indicators/calendar.js:129
+msgid "Date Time Settings"
+msgstr ""
+
+#: ../indicators/network.js:79
+msgid "Network Settings"
+msgstr ""
+
+#: ../indicators/nightlight.js:70
+msgid "Temperature"
+msgstr ""
+
+#: ../indicators/nightlight.js:88 ../indicators/nightlight.js:132
+msgid "Resume"
+msgstr ""
+
+#: ../indicators/nightlight.js:92 ../indicators/nightlight.js:128
+msgid "Turn Off"
+msgstr ""
+
+#: ../indicators/nightlight.js:96
+msgid "Display Settings"
+msgstr ""
+
+#: ../indicators/nightlight.js:128
+msgid "Turn On"
+msgstr ""
+
+#: ../indicators/nightlight.js:131
+msgid "Night Light Disabled"
+msgstr ""
+
+#: ../indicators/nightlight.js:131
+msgid "Night Light On"
+msgstr ""
+
+#: ../indicators/nightlight.js:132
+msgid "Disable Until Tomorrow"
+msgstr ""
+
+#: ../indicators/power.js:64
+msgid "Power Settings"
+msgstr ""
+
+#: ../indicators/system.js:76
+msgid "Log Out"
+msgstr ""
+
+#: ../indicators/system.js:83
+msgid "Account Settings"
+msgstr ""
+
+#: ../indicators/system.js:94
+msgid "System Settings"
+msgstr ""
+
+#: ../indicators/system.js:114
+msgid "Lock"
+msgstr ""
+
+#: ../indicators/system.js:136
+msgid "Switch User"
+msgstr ""
+
+#: ../indicators/system.js:159
+msgid "Orientation Lock"
+msgstr ""
+
+#: ../indicators/system.js:180
+msgid "Suspend"
+msgstr ""
+
+#: ../indicators/system.js:201
+msgid "Power Off"
+msgstr ""
+
+#: ../indicators/volume.js:66
+msgid "Volume Settings"
+msgstr ""
+
+
+#: schemas.xml
+msgid "Calendar"
+msgstr ""
+
+msgid "Night Light"
+msgstr ""
+
+msgid "Volume"
+msgstr ""
+
+msgid "Network"
+msgstr ""
+
+msgid "Power (Brightness)"
+msgstr ""
+
+msgid "Notification"
+msgstr ""
+
+msgid "User"
+msgstr ""
+
