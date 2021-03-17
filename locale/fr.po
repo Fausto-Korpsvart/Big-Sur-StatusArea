@@ -28,7 +28,7 @@ msgstr "Indicateur système/Utilisateur"
 
 #: ../prefs.js:197
 msgid "Show an icon instead of name"
-msgstr "Afficher une icone plutôt que le nom"
+msgstr "Afficher une icône en place du nom"
 
 #: ../prefs.js:214
 msgid "Calendar Indicator"
@@ -40,7 +40,7 @@ msgstr "Changer le format de date"
 
 #: ../prefs.js:251
 msgid "Power Indicator"
-msgstr "Indicteurd'energie "
+msgstr "Indicateur d'énergie"
 
 #: ../prefs.js:255
 msgid "Show battery percentage"
@@ -52,7 +52,7 @@ msgstr "Taille et position"
 
 #: ../prefs.js:283
 msgid "Indicators spacing"
-msgstr "Espace netre les indicateurs"
+msgstr "Espace entre les indicateurs"
 
 #: ../prefs.js:330
 msgid "Indicators Order"
@@ -64,7 +64,7 @@ msgstr "Gauche"
 
 #: ../prefs.js:351
 msgid "Center"
-msgstr "Centrer"
+msgstr "Centre"
 
 #: ../prefs.js:404
 msgid "Top to bottom -> Left to right"
@@ -72,7 +72,7 @@ msgstr "De haut en bas -> De gauche à droite"
 
 #: ../prefs.js:409
 msgid "Reset Indicators"
-msgstr "Réinitialisation des indicatuers"
+msgstr "Réinitialisation des indicateurs"
 
 #: ../prefs.js:415
 msgid "Reset"
@@ -84,7 +84,7 @@ msgstr "À propos"
 
 #: ../prefs.js:484
 msgid "Version: "
-msgstr "Version: "
+msgstr "Version : "
 
 #: ../prefs.js:493
 msgid "If something breaks, don't hesitate to leave a comment at "
@@ -102,7 +102,7 @@ msgstr ""
 
 #: ../indicators/bluetooth.js:70
 msgid "Bluetooth Settings"
-msgstr "Paramètres bluetooth"
+msgstr "Paramètres Bluetooth"
 
 #: ../indicators/calendar.js:101
 msgid "No Events"
@@ -110,11 +110,11 @@ msgstr "Aucun évenement"
 
 #: ../indicators/calendar.js:129
 msgid "Date Time Settings"
-msgstr "Paramètre date et heure"
+msgstr "Paramètres date et heure"
 
 #: ../indicators/network.js:79
 msgid "Network Settings"
-msgstr "Paramètre résaux"
+msgstr "Paramètres réseaux"
 
 #: ../indicators/nightlight.js:70
 msgid "Temperature"
@@ -166,7 +166,7 @@ msgstr "Paramètres système"
 
 #: ../indicators/system.js:114
 msgid "Lock"
-msgstr "Vérouillé"
+msgstr "Verrouiller"
 
 #: ../indicators/system.js:136
 msgid "Switch User"
@@ -174,7 +174,7 @@ msgstr "Changer d'utilisateur"
 
 #: ../indicators/system.js:159
 msgid "Orientation Lock"
-msgstr "Vérouillé l'orientation"
+msgstr "Verrouiller l'orientation"
 
 #: ../indicators/system.js:180
 msgid "Suspend"
@@ -199,7 +199,7 @@ msgid "Volume"
 msgstr "Son"
 
 msgid "Network"
-msgstr "Résaux"
+msgstr "Réseaux"
 
 msgid "Power (Brightness)"
 msgstr "Batterie"
@@ -217,7 +217,7 @@ msgstr "Utilisateur"
 #~ msgstr "Indicateur son"
 
 #~ msgid "Network Indicator"
-#~ msgstr "Indicateur résaux"
+#~ msgstr "Indicateur réseaux"
 
 #~ msgid "User Indicator"
 #~ msgstr "Indicateur utilisateur"
