@@ -193,14 +193,17 @@ msgstr "Calendário"
 msgid "Night Light"
 msgstr "Luz noturna"
 
+msgid "Light"
+msgstr "Brilho"
+
 msgid "Volume"
 msgstr "Volume"
 
 msgid "Network"
 msgstr "Rede"
 
-msgid "Power (Brightness)"
-msgstr "Energia (brilho)"
+msgid "Power"
+msgstr "Energia"
 
 msgid "Notification"
 msgstr "Notificação"

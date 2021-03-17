@@ -192,13 +192,16 @@ msgstr ""
 msgid "Night Light"
 msgstr ""
 
+msgid "Light"
+msgstr ""
+
 msgid "Volume"
 msgstr ""
 
 msgid "Network"
 msgstr ""
 
-msgid "Power (Brightness)"
+msgid "Power"
 msgstr ""
 
 msgid "Notification"

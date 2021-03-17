@@ -195,13 +195,16 @@ msgstr "Calendrier"
 msgid "Night Light"
 msgstr "Mode nuit"
 
+msgid "Light"
+msgstr "Luminosité"
+
 msgid "Volume"
 msgstr "Son"
 
 msgid "Network"
 msgstr "Réseaux"
 
-msgid "Power (Brightness)"
+msgid "Power"
 msgstr "Batterie"
 
 msgid "Notification"

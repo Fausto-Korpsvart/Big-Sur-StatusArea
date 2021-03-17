@@ -188,14 +188,17 @@ msgstr "Ustawienia dźwięku"
 msgid "Night Light Indicator"
 msgstr "Wskaźnik nocnego wyświetlania"
 
+msgid "Light"
+msgstr "Jasność"
+
 msgid "Volume Indicator"
 msgstr "Wskaźnik głośności"
 
 msgid "Network Indicator"
 msgstr "Wskaźnik sieci"
 
-msgid "Power (Brightness) Indicator"
-msgstr "Wskaźnik jasności"
+msgid "Power"
+msgstr "Power"
 
 msgid "User Indicator"
 msgstr "Wskaźnik użytkownika"
