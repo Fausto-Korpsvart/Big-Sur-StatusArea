@@ -3,9 +3,10 @@
   "description": "Move the Power/Network/Volume/User/Date/Notifications menus to the status area. It is a fork of :https://github.com/Fausto-Korpsvart/Big-Sur-StatusArea",
   "name": "Big Sur Status Area",
   "shell-version": [
-    "3.38"
+    "3.38",
+    "40.rc"
   ],
   "url": "https://github.com/Ordissimo/Big-Sur-StatusArea",
   "uuid": "bigSur-StatusArea@ordissimo.com",
-  "version": 3
+  "version": 2
 }
