@@ -1,12 +1,13 @@
-# Panel Indicators
+# Big Sur StatusArea
 
 ## What  is it
 
 A GNOME Shell extension for move the Power/Network/Volume/User/Date/Notifications menus to the status area.
+This project is a fork of https://github.com/Fausto-Korpsvart/Big-Sur-StatusArea
 
 ## Requirements
 
-* GNOME Shell >= 3.30
+* GNOME Shell >= 3.38
 
 ## How to contribute
 
@@ -26,12 +27,12 @@ For a regular use and local development these are the steps to build the
 project and install it:
 
 ```bash
-meson --prefix=$HOME/.local/ --localedir=share/gnome-shell/extensions/panel-indicators@leavitals/locale .build
+meson --prefix=$HOME/.local/ --localedir=share/gnome-shell/extensions/bigSur-StatusArea@ordissimo.com/locale .build
 ninja -C .build install
 ```
 
 It is strongly recommended to delete the destination folder
-($HOME/.local/share/gnome-shell/extensions/panel-indicators@leavitals) before doing this, to ensure that no old
+($HOME/.local/share/gnome-shell/extensions/bigSur-StatusArea@ordissimo.com) before doing this, to ensure that no old
 data is kept.
 
 ## Export extension ZIP file for extensions.gnome.org
@@ -42,5 +43,5 @@ To create a ZIP file with the extension, just run:
 ./export-zip.sh
 ```
 
-This will create the file `panel-indicators@leavitals.zip` with the extension, following the rules for publishing
+This will create the file `bigSur-StatusArea@ordissimo.com.zip` with the extension, following the rules for publishing
 at extensions.gnome.org.
