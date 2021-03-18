@@ -3,6 +3,7 @@
 ## What  is it
 
 A GNOME Shell extension for move the Power/Network/Volume/User/Date/Notifications menus to the status area.
+
 This project is a fork of https://github.com/Fausto-Korpsvart/Big-Sur-StatusArea
 
 ## Requirements
