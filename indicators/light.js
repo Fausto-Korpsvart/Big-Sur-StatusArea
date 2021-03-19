@@ -32,16 +32,13 @@ var LightIndicator = new Lang.Class({
     _init: function () {
         this.parent("LightIndicator");
         this.menu.actor.add_style_class_name("aggregate-menu");
-        //this._power = Main.panel.statusArea.aggregateMenu._power;
-        //this._power.remove_actor(this._power._indicator);
-    
+           
         this._brightness = Main.panel.statusArea.aggregateMenu._brightness;
         this._brightnessIcon = new St.Icon({
             icon_name: "display-brightness-symbolic",
             style_class: "system-status-icon"
         });
         this.box.add_child(this._brightnessIcon);
-        //this.box.add_child(this._brightness._indicator);
         Main.panel.statusArea.aggregateMenu.menu.box.remove_actor(this._brightness.menu.actor);
         this.menu.box.add_actor(this._brightness.menu.actor);
 
@@ -49,10 +46,9 @@ var LightIndicator = new Lang.Class({
         this.menu.addMenuItem(this._separator);
     },
     destroy: function () {
-        // this.box.remove_child(this._brightness._indicator);
+        this.box.remove_child(this._brightnessIcon);
         this.menu.box.remove_actor(this._brightness.menu.actor);
         
-        // this._brightness.add_actor(this._brightness._indicator);
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._brightness.menu.actor);
         
         this.parent();
