@@ -68,11 +68,10 @@ var DialogWindow = new Lang.Class({
             use_header_bar: true,
             modal: true
         });
-        let vbox = new Gtk.VBox({
-            spacing: 20,
-            homogeneous: false,
-            margin: 5
-        });
+        let vbox = new Gtk.VBox();
+        // vbox.set_margin(5);
+        vbox.set_homogeneous(false);
+        vbox.set_spacing(20);
 
         this._createLayout(vbox);
         this.get_content_area().add(vbox);
@@ -91,10 +90,10 @@ const NotebookPage = new GObject.Class({
     _init: function (title) {
         this.parent({
             orientation: Gtk.Orientation.VERTICAL,
-            margin: 24,
-            spacing: 20,
-            homogeneous: false
         });
+        // this.set_margin(24);
+        this.set_homogeneous(false);
+	this.set_spacing(20);
         this.title = new Gtk.Label({
             label: "<b>" + title + "</b>",
             use_markup: true,
@@ -112,14 +111,14 @@ var FrameBox = new Lang.Class({
         this._listBox = new Gtk.ListBox();
         this._listBox.set_selection_mode(Gtk.SelectionMode.NONE);
         this.parent({
-            label_yalign: 0.50,
             child: this._listBox
         });
+        // label_yalign: 0.50;
         this.label = label;
     },
 
     add: function (boxRow) {
-        this._listBox.add(boxRow);
+        this._listBox.append(boxRow);
     }
 });
 
@@ -129,18 +128,19 @@ var FrameBoxRow = new Lang.Class({
     Extends: Gtk.ListBoxRow,
 
     _init: function () {
-        this._grid = new Gtk.Grid({
-            margin: 5,
-            column_spacing: 20,
-            row_spacing: 20
+        this._box = new Gtk.Box({
+            orientation: Gtk.Orientation.HORIZONTAL,
         });
+        //this.set_margin(5);
+        //this.set_row_spacing(20);
+        //this.set_column_spacing(20);
         this.parent({
-            child: this._grid
+            child: this._box
         });
     },
 
     add: function (widget) {
-        this._grid.add(widget);
+        this._box.append(widget);
     }
 });
 
@@ -152,18 +152,18 @@ const PrefsWidget = new GObject.Class({
     _init: function () {
         this.parent({
             orientation: Gtk.Orientation.VERTICAL,
-            spacing: 5,
-            border_width: 5
         });
+        this.set_spacing(5);
+        // this.add_ccs_class("box-prefs-widget");
         this.settings = Convenience.getSettings();
         this.menuItems = new MenuItems.MenuItems(this.settings);
 
-        let notebook = new Gtk.Notebook({
-            margin_left: 6,
-            margin_right: 6
-        });
+        let notebook = new Gtk.Notebook();
+        notebook.set_margin_start(6);
+        notebook.set_margin_end(6);
 
         let settingsPage = new SettingsPage(this.settings);
+
         notebook.append_page(settingsPage, settingsPage.title);
 
         let indicatorsPage = new IndicatorsPage(this.settings, this.menuItems);
@@ -172,7 +172,7 @@ const PrefsWidget = new GObject.Class({
         let aboutPage = new AboutPage(this.settings);
         notebook.append_page(aboutPage, aboutPage.title);
 
-        this.add(notebook);
+        this.append(notebook);
     }
 });
 
@@ -187,12 +187,13 @@ var SettingsPage = new Lang.Class({
             schema_id: "org.gnome.desktop.interface"
         });
 
-        /*
-         * User Settings
-         */
+        //
+         // User Settings
+         //
         let userFrame = new FrameBox(_("User/System Indicator"));
+        userFrame.show();
         let nameIconRow = new FrameBoxRow();
-
+        nameIconRow.show();
         let nameIconLabel = new Gtk.Label({
             label: _("Show an icon instead of name"),
             xalign: 0,
@@ -208,17 +209,20 @@ var SettingsPage = new Lang.Class({
 
         userFrame.add(nameIconRow);
 
-        /*
-         * Calendar Settings
-         */
+        //
+         // Calendar Settings
+         ///
         let calendarFrame = new FrameBox(_("Calendar Indicator"));
+        calendarFrame.show();
         let dateFormatRow = new FrameBoxRow();
+        dateFormatRow.show();
 
         let dateFormatLabel = new Gtk.Label({
             label: _("Change date format"),
             xalign: 0,
             hexpand: true
         });
+        dateFormatLabel.show();
         let dateFormatWikiButton = new Gtk.LinkButton({
             label: _("wiki"),
             uri: "https://help.gnome.org/users/gthumb/unstable/gthumb-date-formats.html",
@@ -229,7 +233,7 @@ var SettingsPage = new Lang.Class({
             //xalign: 0.46
             //})
         });
-
+        dateFormatWikiButton.show();
         let context = dateFormatWikiButton.get_style_context();
         context.add_class("circular");
 
@@ -237,6 +241,7 @@ var SettingsPage = new Lang.Class({
             hexpand: true,
             halign: Gtk.Align.END
         });
+        dateFormatEntry.show();
         this.settings.bind("date-format", dateFormatEntry, "text", Gio.SettingsBindFlags.DEFAULT);
 
         dateFormatRow.add(dateFormatLabel);
@@ -245,9 +250,9 @@ var SettingsPage = new Lang.Class({
 
         calendarFrame.add(dateFormatRow);
 
-        /*
-         * Power Settings
-         */
+        //
+         // Power Settings
+         ///
         let powerFrame = new FrameBox(_("Power Indicator"));
         let showPercentageLabelRow = new FrameBoxRow();
 
@@ -265,9 +270,9 @@ var SettingsPage = new Lang.Class({
         powerFrame.add(showPercentageLabelRow);
 
         // add the frames
-        this.add(userFrame);
-        this.add(calendarFrame);
-        this.add(powerFrame);
+        this.append(userFrame);
+        this.append(calendarFrame);
+        this.append(powerFrame);
     }
 });
 
@@ -288,7 +293,8 @@ var IndicatorsPage = new Lang.Class({
             xalign: 0,
             hexpand: true
         });
-        this.spacingScale = new Gtk.HScale({
+        this.spacingScale = new Gtk.Scale({
+            orientation: Gtk.Orientation.HORIZONTAL,
             adjustment: new Gtk.Adjustment({
                 lower: 0,
                 upper: 15,
@@ -301,7 +307,7 @@ var IndicatorsPage = new Lang.Class({
             hexpand: true,
             value_pos: Gtk.PositionType.RIGHT
         });
-        this.spacingScale.connect("format-value", function (scale, value) {
+        this.spacingScale.connect("value-changed", function (scale, value) {
             return value.toString() + " px";
         });
         this.spacingScale.add_mark(9, Gtk.PositionType.BOTTOM, "");
@@ -315,20 +321,20 @@ var IndicatorsPage = new Lang.Class({
 
         this.spacingBox.add(this.spacingRow);
 
-        this.add(this.spacingBox);
+        this.append(this.spacingBox);
 
 
         this.indicatorsFrame = new FrameBox("");
         this.buildList();
 
         // add the frames
-        this.add(this.indicatorsFrame);
+        this.append(this.indicatorsFrame);
     },
     buildList: function () {
 
         this.remove(this.indicatorsFrame);
         this.indicatorsFrame = new FrameBox(_("Indicators Order"));
-        this.add(this.indicatorsFrame);
+        this.append(this.indicatorsFrame);
 
         this.indicatorsArray = new Array();
         let items = this.menuItems.getItems();
@@ -366,29 +372,22 @@ var IndicatorsPage = new Lang.Class({
             let context = buttonBox.get_style_context();
             context.add_class("linked");
 
-            let buttonUp = new Gtk.Button({
-                //label: _("Up"),
-                image: new Gtk.Image({
-                    icon_name: "go-up-symbolic"
-                })
-            });
+            let buttonUp = new Gtk.Button();
+            buttonUp.set_icon_name("go-up-symbolic");
 
             if (indexItem > 0) {
                 buttonUp.connect("clicked", Lang.bind(this, this.changeOrder, indexItem, -1));
             }
 
-            let buttonDown = new Gtk.Button({
-                //label: _("Down")
-                image: new Gtk.Image({
-                    icon_name: "go-down-symbolic"
-                })
-            });
+            let buttonDown = new Gtk.Button();
+            buttonDown.set_icon_name("go-down-symbolic");
+
             if (indexItem < items.length - 1) {
                 buttonDown.connect("clicked", Lang.bind(this, this.changeOrder, indexItem, 1));
             }
 
-            buttonBox.add(buttonUp);
-            buttonBox.add(buttonDown);
+            buttonBox.append(buttonUp);
+            buttonBox.append(buttonDown);
 
             indicatorRow.add(indicatorLabel);
             indicatorRow.add(statusSwitch);
@@ -415,7 +414,7 @@ var IndicatorsPage = new Lang.Class({
             label: _("Reset"),
             can_focus: true
         });
-        resetButton.get_style_context().add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
+        // resetButton.get_style_context().add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
         resetButton.connect("clicked", Lang.bind(this, this.resetPosition));
 
         resetIndicatorsRow.add(resetButton);
@@ -424,8 +423,6 @@ var IndicatorsPage = new Lang.Class({
 
         this.indicatorsArray.push(positionRow);
         this.indicatorsArray.push(resetIndicatorsRow);
-
-        this.indicatorsFrame.show_all();
     },
     changeOrder: function (o, index, order) {
         this.menuItems.changeOrder(index, order);
@@ -459,55 +456,40 @@ var AboutPage = new Lang.Class({
         let logoPath = Me.path + "/icons/logo.svg";
         let [imageWidth, imageHeight] = [128, 128];
         let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(logoPath, imageWidth, imageHeight);
-        let menuImage = new Gtk.Image({
-            pixbuf: pixbuf
-        });
-        let menuImageBox = new Gtk.VBox({
-            margin_top: 5,
-            margin_bottom: 5,
-            expand: false
-        });
-        menuImageBox.add(menuImage);
+        let menuImage = new Gtk.Image();
+        menuImage.set_from_pixbuf(pixbuf);
+        let menuImageBox = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL});
+        menuImageBox.append(menuImage);
 
         // Create the info box
-        let menuInfoBox = new Gtk.VBox({
-            margin_top: 5,
-            margin_bottom: 5,
-            expand: false
-        });
+        let menuInfoBox = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL});
         let menuLabel = new Gtk.Label({
             label: "<b>Panel Indicators</b>",
             use_markup: true,
-            expand: false
         });
         let versionLabel = new Gtk.Label({
             label: "<b>" + _("Version: ") + releaseVersion + "</b>",
             use_markup: true,
-            expand: false
         });
         let projectDescriptionLabel = new Gtk.Label({
             label: "\n" + _(projectDescription),
-            expand: false
         });
         let helpLabel = new Gtk.Label({
             label: "\n" + _("If something breaks, don\'t hesitate to leave a comment at "),
-            expand: false
         });
         let projectLinkButton = new Gtk.LinkButton({
             label: _("Webpage/Github"),
             uri: projectUrl,
-            expand: false
         });
-        menuInfoBox.add(menuLabel);
-        menuInfoBox.add(versionLabel);
-        menuInfoBox.add(projectDescriptionLabel);
-        menuInfoBox.add(helpLabel);
-        menuInfoBox.add(projectLinkButton);
+        menuInfoBox.append(menuLabel);
+        menuInfoBox.append(versionLabel);
+        menuInfoBox.append(projectDescriptionLabel);
+        menuInfoBox.append(helpLabel);
+        menuInfoBox.append(projectLinkButton);
 
         let authorLabel = new Gtk.Label({
             label: _("This extension is a fork of Extend Panel Menu, thanks to julio641742"),
             justify: Gtk.Justification.CENTER,
-            expand: true
         });
 
         // Create the GNU software box
@@ -516,21 +498,22 @@ var AboutPage = new Lang.Class({
                 'See the <a href="http://www.gnu.org/licenses/gpl-3.0.html">GNU General Public License version 3</a> for details.</span>',
             use_markup: true,
             justify: Gtk.Justification.CENTER,
-            expand: true
         });
-        let gnuSofwareLabelBox = new Gtk.VBox({});
-        gnuSofwareLabelBox.pack_end(gnuSofwareLabel, false, false, 0);
+        let gnuSofwareLabelBox = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL});
+        gnuSofwareLabelBox.append(gnuSofwareLabel);
 
-        this.add(menuImageBox);
-        this.add(menuInfoBox);
-        this.add(authorLabel);
-        this.add(gnuSofwareLabelBox);
+        this.append(menuImageBox);
+        this.append(menuInfoBox);
+        this.append(authorLabel);
+        this.append(gnuSofwareLabelBox);
     }
 });
 
 function buildPrefsWidget() {
     let widget = new PrefsWidget();
-    widget.show_all();
+    widget.show();
 
     return widget;
 }
+
+
