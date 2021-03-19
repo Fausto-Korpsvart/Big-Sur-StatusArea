@@ -89,8 +89,8 @@ var NotificationIndicator = new Lang.Class({
     },
     destroy: function () {
         this._closeButton.disconnect(this._hideIndicator);
-        this._vbox.remove_child(this._messageList.actor)
-        this._messageListParent.add_actor(this._messageList.actor);
+        this._vbox.remove_child(this._messageList)
+        this._messageListParent.add_actor(this._messageList);
         this.parent();
     }
 });
