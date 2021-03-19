@@ -42,8 +42,8 @@ var NotificationIndicator = new Lang.Class({
         } catch (e) {}
         
 
-        this._messageListParent = this._messageList.actor.get_parent();
-        this._messageListParent.remove_actor(this._messageList.actor);
+        this._messageListParent = this._messageList.get_parent();
+        this._messageListParent.remove_actor(this._messageList);
 
         this._indicator = new MessagesIndicator(Main.panel.statusArea.dateMenu._indicator._sources);
 
@@ -53,7 +53,7 @@ var NotificationIndicator = new Lang.Class({
             height: 400
         });
 
-        this._vbox.add(this._messageList.actor);
+        this._vbox.add(this._messageList);
         this.menu.box.add(this._vbox);
 
         try {
@@ -89,8 +89,8 @@ var NotificationIndicator = new Lang.Class({
     },
     destroy: function () {
         this._closeButton.disconnect(this._hideIndicator);
-        this._vbox.remove_child(this._messageList.actor)
-        this._messageListParent.add_actor(this._messageList.actor);
+        this._vbox.remove_child(this._messageList)
+        this._messageListParent.add_actor(this._messageList);
         this.parent();
     }
 });
