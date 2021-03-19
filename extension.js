@@ -193,6 +193,7 @@ function disable() {
     settingsChanged = null;
     settings = null;
 
+    light.destroy();
     nightlight.destroy();
     volume.destroy();
     power.destroy();
