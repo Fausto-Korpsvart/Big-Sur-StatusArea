@@ -281,6 +281,24 @@ var IndicatorsPage = new Lang.Class({
         this.menuItems = menuItems;
 
         this.spacingBox = new FrameBox(_("Indicators spacing"));
+	
+        let activateSpacingLabelRow = new FrameBoxRow();
+
+        activateSpacingLabelRow.add(new Gtk.Label({
+            label: _("Activate Indicator spacing"),
+            xalign: 0,
+            hexpand: true
+        }));
+        let activateSpacingLabelSwitch = new Gtk.Switch({
+            halign: Gtk.Align.END
+        });
+        this.settings.bind("activate-spacing" , activateSpacingLabelSwitch, "active", Gio.SettingsBindFlags.DEFAULT);
+        activateSpacingLabelSwitch.connect("notify", Lang.bind(this, this.spacingEnable));
+        activateSpacingLabelRow.add(activateSpacingLabelSwitch);
+
+        this.spacingBox.add(activateSpacingLabelRow);
+        //if (!this.settings.get_default_value("activate-spacing")) {
+	
         this.spacingRow = new FrameBoxRow();
 
         this.spacingLabel = new Gtk.Label({
@@ -323,6 +341,7 @@ var IndicatorsPage = new Lang.Class({
 
         // add the frames
         this.add(this.indicatorsFrame);
+        this.spacingBox.show(); //add_actor(this.spacingRow);
     },
     buildList: function () {
 
@@ -441,6 +460,16 @@ var IndicatorsPage = new Lang.Class({
     resetPosition: function () {
         this.settings.set_value("items", this.settings.get_default_value("items"));
         this.buildList();
+    },
+    spacingEnable: function (object, p) {
+        if (object.active) {
+            this.settings.set_boolean("activate-spacing", true);
+            this.spacingRow.show(); //add_actor(this.spacingRow);
+	}
+	else {
+            this.settings.set_boolean("activate-spacing", false);
+            this.spacingRow.hide(); //emove_actor(this.spacingRow);
+	}
     },
 });
 

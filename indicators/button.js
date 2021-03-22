@@ -19,12 +19,16 @@
 const { St, Shell } = imports.gi;
 const Lang = imports.lang;
 const PanelMenu = imports.ui.panelMenu;
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
+const Convenience = Me.imports.convenience;
 
 var CustomButton = new Lang.Class({
     Name: "Button",
     Extends: PanelMenu.Button,
 
     _init: function (name) {
+        this.settings = Convenience.getSettings();
         this.parent(0.5, name);
         this.name = name;
         this._center = false;
@@ -38,24 +42,30 @@ var CustomButton = new Lang.Class({
         Shell.AppSystem.get_default().lookup_app(app).activate();
     },
     set_spacing: function (spacing) {
-        this._default_spacing = spacing;
-        this.update_spacing(spacing);
+        if (this.settings.get_boolean("activate-spacing")) {
+            this._default_spacing = spacing;
+            this.update_spacing(spacing);
+	}
     },
     update_spacing: function (spacing) {
-        let style = '-natural-hpadding: %dpx'.format(spacing);
-        if (spacing < 6) {
-            style += '; -minimum-hpadding: %dpx'.format(spacing);
-        }
-        this.set_style(style);
+        if (this.settings.get_boolean("activate-spacing")) {
+            let style = '-natural-hpadding: %dpx'.format(spacing);
+            if (spacing < 6) {
+                style += '; -minimum-hpadding: %dpx'.format(spacing);
+            }
+            this.set_style(style);
+	}
     },
     calculate_spacing: function () {
-        let style = this.get_style();
-        if (style) {
-            let start = style.indexOf("-natural-hpadding: ");
-            let end = style.indexOf("px;");
-            let val = parseInt(style.substring(start + 19, end));
-            return val;
-        }
+        if (this.settings.get_boolean("activate-spacing")) {
+            let style = this.get_style();
+            if (style) {
+                let start = style.indexOf("-natural-hpadding: ");
+                let end = style.indexOf("px;");
+                let val = parseInt(style.substring(start + 19, end));
+                return val;
+            }
+	}
         return NaN
     },
     destroy: function () {
