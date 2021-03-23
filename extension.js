@@ -143,7 +143,7 @@ function applySettings() {
     let centerchildren = CENTER_BOX.get_children().length;
 
     let spacing = settings.get_int("spacing");
-    if (!settings.get_int("activate-spacing"))
+    if (!settings.get_boolean("activate-spacing"))
 	spacing = -1;
 
     indicators.reverse().forEach(function (item) {
