@@ -41,7 +41,7 @@ function init() {
 
 let settings;
 let menuItems;
-let indicators;
+let indicators = null;
 let settingsChanged;
 
 let light = null;
@@ -100,6 +100,7 @@ function enable() {
     settingsChanged[i++] = settings.connect("changed::spacing", applySettings);
     settingsChanged[i++] = settings.connect("changed::user-icon", changeUsericon);
     settingsChanged[i++] = settings.connect("changed::date-format", changeDateformat);
+    settingsChanged[i++] = settings.connect("changed::activate-spacing", applySettings);
 
     applySettings();
     changeUsername();
