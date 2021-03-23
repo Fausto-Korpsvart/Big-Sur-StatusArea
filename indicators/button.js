@@ -42,10 +42,8 @@ var CustomButton = new Lang.Class({
         Shell.AppSystem.get_default().lookup_app(app).activate();
     },
     set_spacing: function (spacing) {
-        if (this.settings.get_boolean("activate-spacing")) {
-            this._default_spacing = spacing;
-            this.update_spacing(spacing);
-	}
+        this._default_spacing = spacing;
+        this.update_spacing(spacing);
     },
     update_spacing: function (spacing) {
         if (this.settings.get_boolean("activate-spacing")) {
@@ -55,17 +53,17 @@ var CustomButton = new Lang.Class({
             }
             this.set_style(style);
 	}
+	else
+            this.set_style("");
     },
     calculate_spacing: function () {
-        if (this.settings.get_boolean("activate-spacing")) {
-            let style = this.get_style();
-            if (style) {
-                let start = style.indexOf("-natural-hpadding: ");
-                let end = style.indexOf("px;");
-                let val = parseInt(style.substring(start + 19, end));
-                return val;
-            }
-	}
+        let style = this.get_style();
+        if (style) {
+            let start = style.indexOf("-natural-hpadding: ");
+            let end = style.indexOf("px;");
+            let val = parseInt(style.substring(start + 19, end));
+            return val;
+        }
         return NaN
     },
     destroy: function () {

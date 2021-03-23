@@ -464,11 +464,11 @@ var IndicatorsPage = new Lang.Class({
     spacingEnable: function (object, p) {
         if (object.active) {
             this.settings.set_boolean("activate-spacing", true);
-            this.spacingRow.show(); //add_actor(this.spacingRow);
+            this.spacingRow.show();
 	}
 	else {
+            this.spacingRow.hide();
             this.settings.set_boolean("activate-spacing", false);
-            this.spacingRow.hide(); //emove_actor(this.spacingRow);
 	}
     },
 });
