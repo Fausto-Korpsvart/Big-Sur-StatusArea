@@ -68,8 +68,9 @@ var DialogWindow = new Lang.Class({
             use_header_bar: true,
             modal: true
         });
-        let vbox = new Gtk.VBox();
-        // vbox.set_margin(5);
+        let vbox = new Gtk.Box({
+            orientation: Gtk.Orientation.VERTICAL,
+        });
         vbox.set_homogeneous(false);
         vbox.set_spacing(20);
 
