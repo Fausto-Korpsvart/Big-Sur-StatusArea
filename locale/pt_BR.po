@@ -182,6 +182,10 @@ msgstr "Suspender"
 msgid "Power Off"
 msgstr "Desligar"
 
+#: ../indicators/system.js:201
+msgid "restart"
+msgstr "Reinicie"
+
 #: ../indicators/volume.js:66
 msgid "Volume Settings"
 msgstr "Configurações de Volume"

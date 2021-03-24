@@ -180,6 +180,10 @@ msgstr "Wstrzymaj"
 msgid "Power Off"
 msgstr "Wyłącz"
 
+#: ../indicators/system.js:201
+msgid "restart"
+msgstr "Uruchom ponownie"
+
 #: ../indicators/volume.js:66
 msgid "Volume Settings"
 msgstr "Ustawienia dźwięku"

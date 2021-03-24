@@ -180,6 +180,10 @@ msgstr ""
 msgid "Power Off"
 msgstr ""
 
+#: ../indicators/system.js:201
+msgid "Restart"
+msgstr ""
+
 #: ../indicators/volume.js:66
 msgid "Volume Settings"
 msgstr ""

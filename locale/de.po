@@ -185,6 +185,10 @@ msgstr "Ruhezustand"
 msgid "Power Off"
 msgstr "Ausschalten"
 
+#: ../indicators/system.js:201
+msgid "Restart"
+msgstr "Neustart"
+
 #: ../indicators/volume.js:66
 msgid "Volume Settings"
 msgstr "Lautstärkeeinstellungen"

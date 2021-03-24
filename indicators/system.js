@@ -49,7 +49,7 @@ var UserIndicator = new Lang.Class({
         });
 
         this._power_gicon = Gio.icon_new_for_string(`${Me.path}/icons/system-shutdown-symbolic.svg`);
-        this._powerIcon = new St.Icon({ gicon: this._power_gicon, style_class: "system-status-icon"});
+        this._powerIcon = new St.Icon({ icon_name: 'avatar-default-symbolic', style_class: "system-status-icon"});
 
         if (this._screencast)
              this.box.add_child(this._screencast);
@@ -197,6 +197,29 @@ var UserIndicator = new Lang.Class({
         //IS THIS NEEDED?
         // if (!this._system._suspendAction.visible) {
         //     suspend.actor.hide();
+        // }
+
+        let restart = new PopupMenu.PopupBaseMenuItem();
+
+        let restart_label = new St.Label({
+            text: _("Restart"),
+            y_align: Clutter.ActorAlign.CENTER
+        });
+
+	let restart_icon = new St.Icon({
+            icon_name: "system-reboot-symbolic",
+            style_class: "system-status-icon",
+            icon_size: PANEL_ICON_SIZE
+        });
+
+        restart.actor.add_actor(restart_icon);
+        restart.actor.add_actor(restart_label);
+
+        restart.connect("activate", () => this._system._systemActions.activateRestart());
+        this.menu.addMenuItem(restart);
+        //IS THIS NEEDED?
+        // if (!this._system._restartAction.visible) {
+        //     restart.actor.hide();
         // }
 
         let power = new PopupMenu.PopupBaseMenuItem();
