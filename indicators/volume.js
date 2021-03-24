@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const { St, Shell, Clutter } = imports.gi;
+const { St, Shell, Clutter, Gio } = imports.gi;
 const Lang = imports.lang;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
@@ -39,12 +39,16 @@ var VolumeIndicator = new Lang.Class({
         this.box.add_child(this._volume._primaryIndicator);
         Main.panel.statusArea.aggregateMenu.menu.box.remove_actor(this._volume.menu.actor);
         this.menu.box.add_actor(this._volume.menu.actor);
-        this.connect("scroll-event", (actor, event) => this._volume._onScrollEvent(actor, event));
+        this.connect("scroll-event", (actor, event) => {
+             this.onScroll(event);
+	});
+        //this.connect("scroll-event", (actor, event) => this._volume._volumeMenu.scrollOutput(event));
 
         let settings = new PopupMenu.PopupMenuItem(_("Volume Settings"));
         settings.connect("activate", () => this._openApp("gnome-sound-panel.desktop"));
         this.menu.addMenuItem(settings);
-        this.menu.box.connect("scroll-event", (actor, event) => this._volume._onScrollEvent(actor, event));
+        // this.menu.box.connect("scroll-event", (actor, event) => this.onScroll(event));
+        //this.menu.box.connect("scroll-event", (actor, event) => this._volume._volumeMenu.scrollOutput(event));
     },
     destroy: function () {
         //this._mediaSection.disconnect(this._mediaVisible);
@@ -56,5 +60,15 @@ var VolumeIndicator = new Lang.Class({
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._volume.menu.actor);
         //Main.panel.statusArea.dateMenu._messageList._addSection(this._mediaSection);
         this.parent();
+    },
+    onScroll: function(event) {
+	let result = this._volume._volumeMenu.scroll(event);
+        if (result == Clutter.EVENT_PROPAGATE || this._volume.menu.actor.mapped)
+             return result;
+
+        let gicon = new Gio.ThemedIcon({ name: this._volume._volumeMenu.getOutputIcon() });
+        let level = this._volume._volumeMenu.getLevel();
+        let maxLevel = this._volume._volumeMenu.getMaxLevel();
+        Main.osdWindowManager.show(-1, gicon, null, level, maxLevel);
     }
 });
