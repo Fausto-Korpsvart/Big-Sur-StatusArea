@@ -32,7 +32,7 @@ var LightIndicator = new Lang.Class({
     _init: function () {
         this.parent("LightIndicator");
         this.menu.actor.add_style_class_name("aggregate-menu");
-           
+    
         this._brightness = Main.panel.statusArea.aggregateMenu._brightness;
         this._brightnessIcon = new St.Icon({
             icon_name: "display-brightness-symbolic",
@@ -48,7 +48,6 @@ var LightIndicator = new Lang.Class({
     destroy: function () {
         this.box.remove_child(this._brightnessIcon);
         this.menu.box.remove_actor(this._brightness.menu.actor);
-        
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._brightness.menu.actor);
         
         this.parent();

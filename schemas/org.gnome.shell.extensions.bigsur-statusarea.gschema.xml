@@ -1,5 +1,9 @@
 <schemalist gettext-domain="gnome-shell-extensions">
     <schema id="org.gnome.shell.extensions.bigsur-statusarea" path="/org/gnome/shell/extensions/bigsur-statusarea/">
+        <key name="activate-spacing" type="b">
+            <default>false</default>
+            <summary>Activate spacing</summary>
+        </key>
         <key name="user-icon" type="b">
             <default>true</default>
             <summary>Show an icon instead of name</summary>
