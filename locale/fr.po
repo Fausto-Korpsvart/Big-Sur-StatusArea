@@ -184,6 +184,10 @@ msgstr "Mise en veille"
 msgid "Power Off"
 msgstr "Éteindre"
 
+#: ../indicators/system.js:201
+msgid "Restart"
+msgstr "Redémarrer"
+
 #: ../indicators/volume.js:66
 msgid "Volume Settings"
 msgstr "Paramètres de son"
