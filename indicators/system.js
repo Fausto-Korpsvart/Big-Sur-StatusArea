@@ -176,6 +176,8 @@ var UserIndicator = new Lang.Class({
         //     orientation.actor.hide();
         // }
 
+        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem()); // SEPARATOR	    
+	    
         ///////////////
         let suspend = new PopupMenu.PopupBaseMenuItem();
 
