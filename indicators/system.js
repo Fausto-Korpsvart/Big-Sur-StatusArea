@@ -199,6 +199,29 @@ var UserIndicator = new Lang.Class({
         //     suspend.actor.hide();
         // }
 
+        let restart = new PopupMenu.PopupBaseMenuItem();
+
+        let restart_label = new St.Label({
+            text: _("Restart"),
+            y_align: Clutter.ActorAlign.CENTER
+        });
+
+	let restart_icon = new St.Icon({
+            icon_name: "system-reboot-symbolic",
+            style_class: "system-status-icon",
+            icon_size: PANEL_ICON_SIZE
+        });
+
+        restart.actor.add_actor(restart_icon);
+        restart.actor.add_actor(restart_label);
+
+        restart.connect("activate", () => this._system._systemActions.activateRestart());
+        this.menu.addMenuItem(restart);
+        //IS THIS NEEDED?
+        // if (!this._system._restartAction.visible) {
+        //     restart.actor.hide();
+        // }
+
         let power = new PopupMenu.PopupBaseMenuItem();
 
         let power_label = new St.Label({
