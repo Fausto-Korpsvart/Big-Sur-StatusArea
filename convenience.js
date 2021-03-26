@@ -83,3 +83,9 @@ function getSettings(schema) {
         settings_schema: schemaObj
     });
 }
+
+function getSettingsNotif(schema) {
+    return new Gio.Settings({
+	schema_id: 'org.gnome.desktop.notifications',
+    });
+}
