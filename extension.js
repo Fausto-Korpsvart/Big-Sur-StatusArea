@@ -101,6 +101,7 @@ function enable() {
     settingsChanged[i++] = settings.connect("changed::user-icon", changeUsericon);
     settingsChanged[i++] = settings.connect("changed::date-format", changeDateformat);
     settingsChanged[i++] = settings.connect("changed::activate-spacing", applySettings);
+    settingsChanged[i++] = settings.connect("changed::separate-date-and-notification", applySettings);
 
     applySettings();
     changeUsername();
@@ -160,13 +161,6 @@ function applySettings() {
 function setup(enabledItems, centerItems, arrayIndicators, name, indicator) {
     if (!indicator) return;
     let index = enabledItems.indexOf(name);
-    if (name == "notification") {
-        if (index == -1) {
-            let banner = Convenience.getSettingsNotif();
-	    banner.set_boolean('show-banners', false);
-	    delete banner;
-        }
-    }
     let valid = index != -1;
     if (valid) {
         arrayIndicators[index] = indicator;

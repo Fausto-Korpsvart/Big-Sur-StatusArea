@@ -286,6 +286,10 @@ var IndicatorsPage = new Lang.Class({
         this.settings = settings;
         this.menuItems = menuItems;
 
+        this.separatingBox = new FrameBox(_("Indicators xxxxx"));
+
+        this.add(this.separatingBox);
+/////////////////////////////////////////////////////////////////////////////////////
         this.spacingBox = new FrameBox(_("Indicators spacing"));
 
 	let activateSpacingLabelRow = new FrameBoxRow();
@@ -298,10 +302,6 @@ var IndicatorsPage = new Lang.Class({
         let activateSpacingLabelSwitch = new Gtk.Switch({
             halign: Gtk.Align.END
         });
-        this.settings.bind("activate-spacing" , activateSpacingLabelSwitch, "active", Gio.SettingsBindFlags.DEFAULT);
-        activateSpacingLabelSwitch.connect("notify", Lang.bind(this, this.spacingEnable));
-        activateSpacingLabelRow.add(activateSpacingLabelSwitch);
-
         this.spacingBox.add(activateSpacingLabelRow);
 
         this.spacingRow = new FrameBoxRow();
@@ -339,12 +339,33 @@ var IndicatorsPage = new Lang.Class({
 
         this.spacingBox.add(this.spacingRow);
 
+        this.settings.bind("activate-spacing" , activateSpacingLabelSwitch, "active", Gio.SettingsBindFlags.DEFAULT);
+        activateSpacingLabelSwitch.connect("notify", Lang.bind(this, this.spacingEnable));
+        activateSpacingLabelRow.add(activateSpacingLabelSwitch);
+
         this.append(this.spacingBox);
 
 
         this.indicatorsFrame = new FrameBox("");
         this.buildList();
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        let activateSeparatingLabelRow = new FrameBoxRow();
+
+        activateSeparatingLabelRow.add(new Gtk.Label({
+            label: _("Date and notification indicators separated, this change requires a restart of gnome-shell"),
+            xalign: 0,
+            hexpand: true
+        }));
+        let activateSeparatingLabelSwitch = new Gtk.Switch({
+            halign: Gtk.Align.END
+        });
+        this.settings.bind("separate-date-and-notification" , activateSeparatingLabelSwitch, "active", Gio.SettingsBindFlags.DEFAULT);
+        activateSeparatingLabelSwitch.connect("notify", Lang.bind(this, this.separatingEnable));
+        activateSeparatingLabelRow.add(activateSeparatingLabelSwitch);
+
+        this.separatingBox.add(activateSeparatingLabelRow);
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // add the frames
         this.append(this.indicatorsFrame);
         this.spacingBox.show(); //add_actor(this.spacingRow);
@@ -356,6 +377,8 @@ var IndicatorsPage = new Lang.Class({
         this.append(this.indicatorsFrame);
 
         this.indicatorsArray = new Array();
+        this.statusArray = new Array();
+        this.labelsArray = new Array();
         let items = this.menuItems.getItems();
 
         for (let indexItem in items) {
@@ -415,6 +438,8 @@ var IndicatorsPage = new Lang.Class({
 
             this.indicatorsFrame.add(indicatorRow);
             this.indicatorsArray.push(indicatorRow);
+            this.statusArray.push(statusSwitch);
+            this.labelsArray.push(_(item["label"]));
         }
 
         let positionRow = new FrameBoxRow();
@@ -448,7 +473,15 @@ var IndicatorsPage = new Lang.Class({
         this.buildList();
     },
     changeEnable: function (object, p, index) {
-        this.menuItems.changeEnable(index, object.active)
+        let items = this.menuItems.getItems();
+        let item = items[index];
+
+        if (_(item["label"]) == _("Calendar") &&
+           !this.settings.get_boolean("separate-date-and-notification")) {
+            object.set_active(false);
+       }
+       else
+            this.menuItems.changeEnable(index, object.active);
     },
     enableCenter: function (object, index) {
         this.menuItems.changePosition(index, object.get_active());
@@ -466,6 +499,19 @@ var IndicatorsPage = new Lang.Class({
 	else {
             this.spacingRow.hide();
             this.settings.set_boolean("activate-spacing", false);
+	}
+    },
+    separatingEnable: function (object, p) {
+        if (object.active) {
+            this.settings.set_boolean("separate-date-and-notification" , true);
+	}
+	else {
+	    for(let x = 0; x < this.labelsArray.length; x++) {)
+		 if (this.labelsArray[x] == _("Calendar")) {
+                     this.statusArray[x].set_active(false);
+		 }
+	    }
+            this.settings.set_boolean("separate-date-and-notification" , false);
 	}
     },
 });
