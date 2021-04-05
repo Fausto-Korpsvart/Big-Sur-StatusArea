@@ -288,7 +288,7 @@ var IndicatorsPage = new Lang.Class({
 
         this.separatingBox = new FrameBox(_("Unified Calendar/Notification Indicator"));
 
-        this.add(this.separatingBox);
+        this.append(this.separatingBox);
 /////////////////////////////////////////////////////////////////////////////////////
         this.spacingBox = new FrameBox(_("Indicator Padding"));
 	
@@ -506,7 +506,7 @@ var IndicatorsPage = new Lang.Class({
             this.settings.set_boolean("separate-date-and-notification" , true);
 	}
 	else {
-	    for(let x = 0; x < this.labelsArray.length; x++) {)
+	    for(let x = 0; x < this.labelsArray.length; x++) {
 		 if (this.labelsArray[x] == _("Calendar")) {
                      this.statusArray[x].set_active(false);
 		 }
