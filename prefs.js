@@ -286,16 +286,16 @@ var IndicatorsPage = new Lang.Class({
         this.settings = settings;
         this.menuItems = menuItems;
 
-        this.separatingBox = new FrameBox(_("Indicators xxxxx"));
+        this.separatingBox = new FrameBox(_("Unified Calendar/Notification Indicator"));
 
         this.add(this.separatingBox);
 /////////////////////////////////////////////////////////////////////////////////////
-        this.spacingBox = new FrameBox(_("Indicators spacing"));
-
-	let activateSpacingLabelRow = new FrameBoxRow();
+        this.spacingBox = new FrameBox(_("Indicator Padding"));
+	
+        let activateSpacingLabelRow = new FrameBoxRow();
 
         activateSpacingLabelRow.add(new Gtk.Label({
-            label: _("Activate Indicator spacing"),
+            label: _("Enable toggle for custom indicator padding"),
             xalign: 0,
             hexpand: true
         }));
@@ -353,7 +353,7 @@ var IndicatorsPage = new Lang.Class({
         let activateSeparatingLabelRow = new FrameBoxRow();
 
         activateSeparatingLabelRow.add(new Gtk.Label({
-            label: _("Date and notification indicators separated, this change requires a restart of gnome-shell"),
+            label: _("Enable toggle for individual calendar and notification indicators (gnome-shell restart required for effect)"),
             xalign: 0,
             hexpand: true
         }));
