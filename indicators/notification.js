@@ -130,54 +130,151 @@ var NotificationIndicator = new Lang.Class({
     },
     prepareCalendar: function () {
         if (!this.settings.get_boolean("separate-date-and-notification")) {
-		this._calendar = Main.panel.statusArea.dateMenu._calendar;
-		this._date = Main.panel.statusArea.dateMenu._date;
-		this._clockDisplay = Main.panel.statusArea.dateMenu._clockDisplay;
-		this._displaysSection = Main.panel.statusArea.dateMenu._displaysSection;
-		this._clockDisplayParent = this._clockDisplay.get_parent();
-		this._calendarParent = this._calendar.get_parent();
-		this._dateParent = this._date.get_parent();
-		this._displaysSectionParent = this._displaysSection.get_parent();
-		this._clockDisplayParent.remove_actor(this._clockDisplay);
-		this._calendarParent.remove_actor(this._calendar);
-		this._dateParent.remove_actor(this._date);
-		this._displaysSectionParent.remove_actor(this._displaysSection);
-        	this.box.insert_child_at_index(this._clockDisplay, 0);
+			this._calendar = Main.panel.statusArea.dateMenu._calendar;
+			this._date = Main.panel.statusArea.dateMenu._date;
+			this._eventsSection = new imports.ui.dateMenu.EventsSection();
+			this._clocksSection = Main.panel.statusArea.dateMenu._clocksItem;
+			this._weatherSection = Main.panel.statusArea.dateMenu._weatherItem;
+			this._clockIndicator = Main.panel.statusArea.dateMenu._clockDisplay;
+
+			this._clockIndicatorFormat = new St.Label({
+				  style_class: "clock-display",
+				  visible: false,
+				 y_align: Clutter.ActorAlign.CENTER
+			});
+
+
+
+			this._indicatorParent = this._clockIndicator.get_parent();
+			this._calendarParent = this._calendar.get_parent();
+			this._sectionParent = this._clocksSection.get_parent();
+
+			this._indicatorParent.remove_actor(this._clockIndicator);
+			this._indicatorParent.remove_child(this._date);
+			this._calendarParent.remove_child(this._calendar);
+			this._sectionParent.remove_child(this._clocksSection);
+			this._sectionParent.remove_child(this._weatherSection);
+
+			this.box.add_child(this._clockIndicator, 0);
+        	this.box.add_child(this._clockIndicatorFormat, 0);
         }   
     },
     addCalendar: function () {
         if (!this.settings.get_boolean("separate-date-and-notification")) {
 		this._vboxd.show();
-		this._vboxd.add_actor(this._date);
-		this._vboxd.add_actor(this._calendar);
-		this._vboxd.add_actor(this._displaysSection);
+                let now = new Date();
+                let hbox_date = new St.BoxLayout({
+					vertical: true,style_class: 'datemenu-today-button',
+					x_expand: true,
+					can_focus: true,
+					reactive: false,
+                });
+                this._vboxd.add_actor(hbox_date);
+        
+                let _dayLabel = new St.Label({ style_class: 'day-label',
+                                        x_align: Clutter.ActorAlign.START,
+                                        });
+                hbox_date.add_actor(_dayLabel);
+                _dayLabel.set_text(now.toLocaleFormat('%A'));
+                 let _dateLabel = new St.Label({ style_class: 'date-label' });
+                 hbox_date.add_actor(_dateLabel);
+                 let dateFormat = Shell.util_translate_time_string(N_("%B %-d %Y"));
+                 _dateLabel.set_text(now.toLocaleFormat(dateFormat));
 
-		this.menu.connect("open-state-changed", (menu, isOpen) => {
-		    if (isOpen) {
-                        if (!this.settings.get_boolean("separate-date-and-notification")) {
-		              let now = new Date();
-		              this._date.setDate(now);
-		              this._calendar.setDate(now);
-		              this._eventsSection.setDate(now);
-		              //this._messageList.setDate(now);
-			}
-		    }
-		});
+
+
+
+                this._displaysSection = new St.ScrollView({
+                     style_class: "datemenu-displays-section vfade",
+                     clip_to_allocation: true,
+                     x_expand: true,
+                });
+
+                this._displaysSection.set_policy(St.PolicyType.NEVER, St.PolicyType.EXTERNAL);
+                this._vboxd.add_child(this._displaysSection);
+
+                this.displayBox = new St.BoxLayout({
+                     vertical: true,
+                     x_expand: true,
+                     style_class: "datemenu-displays-box"
+               });
+               this.displayBox.add_child(this._eventsSection);
+               this.displayBox.add_child(this._clocksSection);
+               this.displayBox.add_child(this._weatherSection);
+               this._displaysSection.add_actor(this.displayBox);
+               this._vboxd.add_child(this._date);
+               this._vboxd.add_child(this._calendar);
+
+                this.menu.connect("open-state-changed", (menu, isOpen) => {
+                     if (isOpen) {
+                          let now = new Date();
+                          this._calendar.setDate(now);
+                          this._eventsSection.setDate(now);
+                          //this._date.setDate(now);
+                     }
+                });
+		this._date_changed = this._calendar.connect(
+                     "selected-date-changed",
+                     (calendar, date) => {
+                          this._eventsSection.setDate(date);
+                     }
+		);
         }
 	else
 	        this._vboxd.hide();
     },
+    override: function (format) {
+        if (!this.settings.get_boolean("separate-date-and-notification")) {
+                this.resetFormat();
+                if (format == "") {
+                      return
+                }
+                let that = this;
+                this._formatChanged = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 1, () => {
+                     that.changeFormat();
+                     return true;
+                });
+                this._clockIndicator.hide();
+                this._clockIndicatorFormat.show();
+                this._dateFormat = format;
+                this.changeFormat();
+	}
+    },
+    changeFormat: function () {
+        if (!this.settings.get_boolean("separate-date-and-notification")) {
+               if (this._dateFormat && this._dateFormat != "") {
+                     let date = new Date();
+                     this._clockIndicatorFormat.set_text(date.toLocaleFormat(this._dateFormat));
+               }
+	}
+    },
+    resetFormat: function () {
+        if (!this.settings.get_boolean("separate-date-and-notification")) {
+                if (this._formatChanged) {
+                     GLib.source_remove(this._formatChanged);
+                     this._formatChanged = null;
+                }
+                this._clockIndicator.show();
+                this._clockIndicatorFormat.hide();
+	}
+    },
     removeCalendar: function () {
         if (!this.settings.get_boolean("separate-date-and-notification")) {
-		this._vboxd.remove_actor(this._date);
-		this._vboxd.remove_actor(this._calendar);
-		this._vboxd.remove_actor(this._displaysSection);
-		this.box.remove_child(this._clockDisplay);
+			this.resetFormat();
+			this._calendar.disconnect(this._date_changed);
 
-		this._calendarParent.add_actor(this._calendar);
-		this._dateParent.add_actor(this._date);
-		this._displaysSectionParent.add_actor(this._displaysSection);        
-		this._clockDisplayParent.add_actor(this._clockDisplay);
+			this.displayBox.remove_child(this._clocksSection);
+			this.displayBox.remove_child(this._weatherSection);
+			this._vboxd.remove_actor(this._date);
+			this._vboxd.remove_actor(this._calendar);
+			this.box.remove_child(this._clockIndicator);
+
+
+			this._indicatorParent.add_actor(this._date);
+			this._indicatorParent.add_actor(this._clockIndicator);
+			this._sectionParent.add_child(this._weatherSection);
+			this._sectionParent.add_child(this._clocksSection);
+			this._calendarParent.add_child(this._calendar);
         }
     },
 
@@ -238,10 +335,10 @@ var MessagesIndicator = new Lang.Class({
 	else {
 	    if (count > 0) {
                  this._icon.icon_name = 'media-record-symbolic';
+                 this._icon.show();
 	    }
 	    else {
-                 icon = 'notifications-symbolic';
-                 this._icon.gicon = Gio.icon_new_for_string(`${Me.path}/icons/${icon}.svg`);
+               this.actor.hide();
 	    }
 	}
 
