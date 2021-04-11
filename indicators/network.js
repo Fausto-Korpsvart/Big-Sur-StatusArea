@@ -99,8 +99,7 @@ var NetworkIndicator = new Lang.Class({
     },
     _sync: function () {
         this._arrowIcon.hide();
-        if (this.box.get_width() == 0 && 
-            !this._network._primaryIndicator.visible &&
+        if (!this._network._primaryIndicator.visible &&
             !this._network._vpnIndicator.visible) {
             /*if (this._rfkill.airplaneMode)
 	        this._arrowIcon.icon_name = 'airplane-mode-symbolic';
