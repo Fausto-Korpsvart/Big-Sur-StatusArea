@@ -290,7 +290,7 @@ var IndicatorsPage = new Lang.Class({
 
         this.append(this.separatingBox);
 /////////////////////////////////////////////////////////////////////////////////////
-        this.spacingBox = new FrameBox(_("Indicator Padding"));
+        this.spacingBox = new FrameBox(_("Indicator padding"));
 	
         let activateSpacingLabelRow = new FrameBoxRow();
 
