@@ -55,7 +55,7 @@ function initTranslations(domain) {
 function getSettings(schema) {
     let extension = ExtensionUtils.getCurrentExtension();
 
-    schema = "org.gnome.shell.extensions.panel-indicators";
+    schema = "org.gnome.shell.extensions.bigsur-statusarea";
     //schema = schema || extension.metadata["settings-schema"];
 
     const GioSSS = Gio.SettingsSchemaSource;

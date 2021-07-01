@@ -21,13 +21,11 @@ const Lang = imports.lang;
 const Main = imports.ui.main;
 const Config = imports.misc.config;
 const PopupMenu = imports.ui.popupMenu;
-const Gettext = imports.gettext.domain("panel-indicators");
+const Gettext = imports.gettext.domain("bigSur-StatusArea");
 const _ = Gettext.gettext;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
-
-var PANEL_ICON_SIZE = 16;
 
 var BluetoothIndicator = new Lang.Class({
     Name: "BluetoothIndicator",
@@ -35,7 +33,7 @@ var BluetoothIndicator = new Lang.Class({
 
     _init: function () {
         this.parent("BluetoothIndicator");
-        this.menu.box.set_width(270);
+        //this.menu.box.set_width(270);
         this.menu.actor.add_style_class_name("aggregate-menu");
 
         this._bluetooth = null;
@@ -49,17 +47,16 @@ var BluetoothIndicator = new Lang.Class({
             return;
         }
         
-        this._bluetooth_active_gicon = Gio.icon_new_for_string(`${Me.path}/icons/bluetooth-active-symbolic.svg`);
-        this._bluetooth_disabled_gicon = Gio.icon_new_for_string(`${Me.path}/icons/bluetooth-disabled-symbolic.svg`);
+        this._bluetooth_active_icon_name = 'bluetooth-active-symbolic';
+        this._bluetooth_disabled_icon_name = 'bluetooth-disabled-symbolic';
         this._bluetooth_paired_gicon = Gio.icon_new_for_string(`${Me.path}/icons/bluetooth-paired-symbolic.svg`);
 
-        this._bluetooth.indicators.remove_actor(this._bluetooth._indicator);
+        this._bluetooth.remove_actor(this._bluetooth._indicator);
         this._bluetooth._indicator.hide();
         this._bluetooth._item.menu._setSettingsVisibility(false);
 
-        this._indicator = new St.Icon();
-        this._indicator.gicon = this._bluetooth_active_gicon;
-        this._indicator.icon_size = PANEL_ICON_SIZE;
+        this._indicator = new St.Icon({style_class: "system-status-icon"});
+        this._indicator.icon_name = 'bluetooth-active-symbolic';
 
         this.box.add_child(this._indicator);
       
@@ -95,7 +92,11 @@ var BluetoothIndicator = new Lang.Class({
         let sensitive = !Main.sessionMode.isLocked && !Main.sessionMode.isGreeter;
         this.menu.setSensitive(sensitive);
 
-        let [nDevices, nConnectedDevices] = this._bluetooth._getNDevices();
+        let adapter = this._bluetooth._getDefaultAdapter();
+	let devices = this._bluetooth._getDeviceInfos(adapter);
+        let connectedDevices = devices.filter(dev => dev.connected);
+        let nConnectedDevices = connectedDevices.length;
+        let nDevices = devices.length;
 
         if (nConnectedDevices > 0) {
             // Paired
@@ -104,12 +105,12 @@ var BluetoothIndicator = new Lang.Class({
         } else if (nConnectedDevices == -1) {
             // Off
             this._bluetooth._item.actor.show();
-            this._indicator.gicon = this._bluetooth_disabled_gicon;
-            this._bluetooth._item.icon.gicon = this._bluetooth_disabled_gicon;
+	    this._indicator.icon_name = 'bluetooth-disabled-symbolic';	
+            this._bluetooth._item.icon.icon_name = 'bluetooth-disabled-symbolic';	
         } else {
             // On
-            this._indicator.gicon = this._bluetooth_active_gicon;
-            this._bluetooth._item.icon.gicon = this._bluetooth_active_gicon;
+            this._indicator.icon_name = 'bluetooth-active-symbolic';
+            this._bluetooth._item.icon.icon_name = 'bluetooth-active-symbolic';
         }
 
     },
@@ -120,7 +121,7 @@ var BluetoothIndicator = new Lang.Class({
 
         this.box.remove_child(this._bluetooth._indicator);
         this.menu.box.remove_actor(this._bluetooth.menu.actor);
-        this._bluetooth.indicators.add_actor(this._bluetooth._indicator);
+        this._bluetooth.add_actor(this._bluetooth._indicator);
         this._bluetooth._item.menu._setSettingsVisibility(true);
 
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._bluetooth.menu.actor);
