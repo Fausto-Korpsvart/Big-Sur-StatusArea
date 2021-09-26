@@ -91,7 +91,7 @@ var NetworkIndicator = new Lang.Class({
         }
 
         this._rfkill._sync();
-        this._location._syncIndicator();
+        this._location.notify('in-use');
         this._sync();
 
         Main.sessionMode.connect('updated', () => this._sync());
