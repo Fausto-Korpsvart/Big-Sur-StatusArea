@@ -17,7 +17,7 @@
  */
 
 const { St, Gio } = imports.gi;
-const Lang = imports.lang;
+const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const Slider = imports.ui.slider;
 const PopupMenu = imports.ui.popupMenu;
@@ -26,7 +26,7 @@ const _ = Gettext.gettext;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 
-var NightLightIndicator = new Lang.Class({
+var NightLightIndicator = new GObject.Class({
     Name: "NightLightIndicator",
     Extends: CustomButton,
 

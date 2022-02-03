@@ -19,7 +19,7 @@
 const { AccountsService, Clutter, GLib, St, Gio } = imports.gi;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
-const Lang = imports.lang;
+const GObject = imports.gi.GObject;
 const Gettext = imports.gettext.domain("bigSur-StatusArea");
 const _ = Gettext.gettext;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
@@ -28,7 +28,7 @@ const CustomButton = Extension.imports.indicators.button.CustomButton;
 
 var PANEL_ICON_SIZE = 16;
 
-var UserIndicator = new Lang.Class({
+var UserIndicator = new GObject.Class({
     Name: "UserIndicator",
     Extends: CustomButton,
 

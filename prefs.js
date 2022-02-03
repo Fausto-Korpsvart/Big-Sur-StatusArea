@@ -26,7 +26,7 @@ const _ = Gettext.gettext;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
-const Lang = imports.lang;
+// const Lang = imports.lang;
 
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const MenuItems = Extension.imports.menuItems;
@@ -56,7 +56,7 @@ const IconButton = new GObject.Class({
     }
 });
 
-var DialogWindow = new Lang.Class({
+var DialogWindow = new GObject.Class({
     Name: "DialogWindow",
     GTypeName: "DialogWindow",
     Extends: Gtk.Dialog,
@@ -103,7 +103,7 @@ const NotebookPage = new GObject.Class({
     }
 });
 
-var FrameBox = new Lang.Class({
+var FrameBox = new GObject.Class({
     Name: "FrameBox",
     GTypeName: "FrameBox",
     Extends: Gtk.Frame,
@@ -123,7 +123,7 @@ var FrameBox = new Lang.Class({
     }
 });
 
-var FrameBoxRow = new Lang.Class({
+var FrameBoxRow = new GObject.Class({
     Name: "FrameBoxRow",
     GTypeName: "FrameBoxRow",
     Extends: Gtk.ListBoxRow,
@@ -177,7 +177,7 @@ const PrefsWidget = new GObject.Class({
     }
 });
 
-var SettingsPage = new Lang.Class({
+var SettingsPage = new GObject.Class({
     Name: "SettingsPage",
     Extends: NotebookPage,
 
@@ -277,7 +277,7 @@ var SettingsPage = new Lang.Class({
     }
 });
 
-var IndicatorsPage = new Lang.Class({
+var IndicatorsPage = new GObject.Class({
     Name: "IndicatorsPage",
     Extends: NotebookPage,
 
@@ -330,9 +330,7 @@ var IndicatorsPage = new Lang.Class({
         });
         this.spacingScale.add_mark(9, Gtk.PositionType.BOTTOM, "");
         this.spacingScale.set_value(this.settings.get_int("spacing"));
-        this.spacingScale.connect("value-changed", Lang.bind(this, function () {
-            this.settings.set_int("spacing", this.spacingScale.get_value());
-        }));
+        this.spacingScale.connect("value-changed", this.getSpacingScale.bind(this));
 
         this.spacingRow.add(this.spacingLabel);
         this.spacingRow.add(this.spacingScale);
@@ -340,7 +338,7 @@ var IndicatorsPage = new Lang.Class({
         this.spacingBox.add(this.spacingRow);
 
         this.settings.bind("activate-spacing" , activateSpacingLabelSwitch, "active", Gio.SettingsBindFlags.DEFAULT);
-        activateSpacingLabelSwitch.connect("notify", Lang.bind(this, this.spacingEnable));
+        activateSpacingLabelSwitch.connect("notify", this.spacingEnable.bind(this));
         activateSpacingLabelRow.add(activateSpacingLabelSwitch);
 
         this.append(this.spacingBox);
@@ -361,7 +359,7 @@ var IndicatorsPage = new Lang.Class({
             halign: Gtk.Align.END
         });
         this.settings.bind("separate-date-and-notification" , activateSeparatingLabelSwitch, "active", Gio.SettingsBindFlags.DEFAULT);
-        activateSeparatingLabelSwitch.connect("notify", Lang.bind(this, this.separatingEnable));
+        activateSeparatingLabelSwitch.connect("notify", this.separatingEnable.bind(this));
         activateSeparatingLabelRow.add(activateSeparatingLabelSwitch);
 
         this.separatingBox.add(activateSeparatingLabelRow);
@@ -369,6 +367,8 @@ var IndicatorsPage = new Lang.Class({
         // add the frames
         this.append(this.indicatorsFrame);
         this.spacingBox.show(); //add_actor(this.spacingRow);
+    },
+    getSpacingScale: function () {
     },
     buildList: function () {
 
@@ -398,13 +398,13 @@ var IndicatorsPage = new Lang.Class({
             positionCombo.append_text(_("Left"));
             positionCombo.append_text(_("Center"));
             positionCombo.set_active(item["position"]);
-            positionCombo.connect("changed", Lang.bind(this, this.enableCenter, indexItem));
+            positionCombo.connect("changed", this.enableCenter.bind(this, indexItem));
 
             let statusSwitch = new Gtk.Switch({
                 active: (item["enable"] == "1"),
                 halign: Gtk.Align.END
             });
-            statusSwitch.connect("notify", Lang.bind(this, this.changeEnable, indexItem));
+            statusSwitch.connect("notify", this.changeEnable.bind(this, indexItem));
 
 
             let buttonBox = new Gtk.Box({
@@ -418,14 +418,14 @@ var IndicatorsPage = new Lang.Class({
             buttonUp.set_icon_name("go-up-symbolic");
 
             if (indexItem > 0) {
-                buttonUp.connect("clicked", Lang.bind(this, this.changeOrder, indexItem, -1));
+                buttonUp.connect("clicked", this.changeOrder.bind(this, indexItem, -1));
             }
 
             let buttonDown = new Gtk.Button();
             buttonDown.set_icon_name("go-down-symbolic");
 
             if (indexItem < items.length - 1) {
-                buttonDown.connect("clicked", Lang.bind(this, this.changeOrder, indexItem, 1));
+                buttonDown.connect("clicked", this.changeOrder.bind(this, indexItem, 1));
             }
 
             buttonBox.append(buttonUp);
@@ -459,7 +459,7 @@ var IndicatorsPage = new Lang.Class({
             can_focus: true
         });
         // resetButton.get_style_context().add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
-        resetButton.connect("clicked", Lang.bind(this, this.resetPosition));
+        resetButton.connect("clicked", this.resetPosition.bind(this));
 
         resetIndicatorsRow.add(resetButton);
         this.indicatorsFrame.add(positionRow);
@@ -516,7 +516,7 @@ var IndicatorsPage = new Lang.Class({
     },
 });
 
-var AboutPage = new Lang.Class({
+var AboutPage = new GObject.Class({
     Name: "AboutPage",
     Extends: NotebookPage,
 

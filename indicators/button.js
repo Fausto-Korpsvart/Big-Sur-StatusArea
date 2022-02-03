@@ -17,13 +17,13 @@
  */
 
 const { St, Shell } = imports.gi;
-const Lang = imports.lang;
+const GObject = imports.gi.GObject;
 const PanelMenu = imports.ui.panelMenu;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
 
-var CustomButton = new Lang.Class({
+var CustomButton = new GObject.Class({
     Name: "Button",
     Extends: PanelMenu.Button,
 

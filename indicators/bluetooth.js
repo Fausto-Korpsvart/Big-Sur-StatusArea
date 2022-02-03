@@ -17,7 +17,7 @@
  */
 
 const { St, Gio, GnomeBluetooth } = imports.gi;
-const Lang = imports.lang;
+const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const Config = imports.misc.config;
 const PopupMenu = imports.ui.popupMenu;
@@ -27,7 +27,7 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 
-var BluetoothIndicator = new Lang.Class({
+var BluetoothIndicator = new GObject.Class({
     Name: "BluetoothIndicator",
     Extends: CustomButton,
 

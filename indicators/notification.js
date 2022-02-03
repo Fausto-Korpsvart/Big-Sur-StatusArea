@@ -19,7 +19,7 @@
 const { Clutter, Gio, GLib, GnomeDesktop,
         GObject, GWeather, Pango, Shell, St } = imports.gi;
 const Main = imports.ui.main;
-const Lang = imports.lang;
+const GObject = imports.gi.GObject;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Gettext = imports.gettext.domain("bigSur-StatusArea");
 const _ = Gettext.gettext;
@@ -51,7 +51,7 @@ class CalendarColumnLayout2 extends Clutter.BoxLayout {
 
 var settingsChanged = null;
 
-var NotificationIndicator = new Lang.Class({
+var NotificationIndicator = new GObject.Class({
     Name: "NotificationIndicator",
     Extends: CustomButton,
 
@@ -288,7 +288,7 @@ var NotificationIndicator = new Lang.Class({
     }
 });
 
-var MessagesIndicator = new Lang.Class({
+var MessagesIndicator = new GObject.Class({
     Name: 'MessagesIndicator',
 
     _init: function (src, settings) {

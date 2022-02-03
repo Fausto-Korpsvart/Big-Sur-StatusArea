@@ -17,7 +17,7 @@
  */
 
 const { St, Shell, Clutter, Gio } = imports.gi;
-const Lang = imports.lang;
+const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
 const Gettext = imports.gettext.domain("bigSur-StatusArea");
@@ -26,7 +26,7 @@ const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 const Convenience = Extension.imports.convenience;
 
-var VolumeIndicator = new Lang.Class({
+var VolumeIndicator = new GObject.Class({
     Name: "VolumeIndicator",
     Extends: CustomButton,
 

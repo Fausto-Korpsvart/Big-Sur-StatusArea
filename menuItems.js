@@ -17,7 +17,7 @@
  */
 
 const Lang = imports.lang;
-var MenuItems = new Lang.Class({
+var MenuItems = new GObject.Class({
     Name: "MenuItems",
     _init: function (settings) {
         this.settings = settings;

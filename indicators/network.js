@@ -17,7 +17,7 @@
  */
 
 const { St } = imports.gi;
-const Lang = imports.lang;
+const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const Config = imports.misc.config;
 const PopupMenu = imports.ui.popupMenu;
@@ -26,7 +26,7 @@ const _ = Gettext.gettext;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 
-var NetworkIndicator = new Lang.Class({
+var NetworkIndicator = new GObject.Class({
     Name: "NetworkIndicator",
     Extends: CustomButton,
 

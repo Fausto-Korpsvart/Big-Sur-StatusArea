@@ -17,7 +17,7 @@
  */
 
 const { St, Gtk, GLib, Clutter, Gio, Shell } = imports.gi;
-const Lang = imports.lang;
+const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
 const Gettext = imports.gettext.domain("bigSur-StatusArea");
@@ -25,7 +25,7 @@ const _ = Gettext.gettext;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 
-var CalendarIndicator = new Lang.Class({
+var CalendarIndicator = new GObject.Class({
     Name: "CalendarIndicator",
     Extends: CustomButton,
     _init: function () {
