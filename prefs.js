@@ -35,12 +35,12 @@ function init() {
     Convenience.initTranslations("bigSur-StatusArea");
 }
 
-const IconButton = new GObject.Class({
-    Name: "IconButton",
+const IconButton = GObject.registerClass({
     GTypeName: "IconButton",
-    Extends: Gtk.Button,
+}
+class IconButton extends Gtk.Button {
 
-    _init: function (params) {
+    _init (params) {
         this.parent({});
         if (params["circular"]) {
             let context = this.get_style_context();
@@ -56,12 +56,12 @@ const IconButton = new GObject.Class({
     }
 });
 
-var DialogWindow = new GObject.Class({
-    Name: "DialogWindow",
+var DialogWindow = GObject.registerClass({
     GTypeName: "DialogWindow",
-    Extends: Gtk.Dialog,
+}
+class DialogWindow extends Gtk.Dialog {
 
-    _init: function (title, parent) {
+    _init (title, parent) {
         this.parent({
             title: title,
             transient_for: parent.get_toplevel(),
@@ -76,19 +76,20 @@ var DialogWindow = new GObject.Class({
 
         this._createLayout(vbox);
         this.get_content_area().add(vbox);
-    },
+    }
 
-    _createLayout: function (vbox) {
+    _createLayout (vbox) {
         throw "Not implemented!";
     }
 });
 
-const NotebookPage = new GObject.Class({
-    Name: "NotebookPage",
+const NotebookPage = GObject.registerClass({
     GTypeName: "NotebookPage",
-    Extends: Gtk.Box,
+    
+}
+class NotebookPage extends Gtk.Box {
 
-    _init: function (title) {
+    _init  (title) {
         this.parent({
             orientation: Gtk.Orientation.VERTICAL,
         });
@@ -103,12 +104,13 @@ const NotebookPage = new GObject.Class({
     }
 });
 
-var FrameBox = new GObject.Class({
-    Name: "FrameBox",
+var FrameBox = GObject.registerClass({
     GTypeName: "FrameBox",
-    Extends: Gtk.Frame,
+   
+}
+class FrameBox extends Gtk.Frame {
 
-    _init: function (label) {
+    _init (label) {
         this._listBox = new Gtk.ListBox();
         this._listBox.set_selection_mode(Gtk.SelectionMode.NONE);
         this.parent({
@@ -116,19 +118,19 @@ var FrameBox = new GObject.Class({
         });
         // label_yalign: 0.50;
         this.label = label;
-    },
+    }
 
-    add: function (boxRow) {
+    add (boxRow) {
         this._listBox.append(boxRow);
     }
 });
 
-var FrameBoxRow = new GObject.Class({
-    Name: "FrameBoxRow",
+var FrameBoxRow = GObject.registerClass({
     GTypeName: "FrameBoxRow",
-    Extends: Gtk.ListBoxRow,
+}
+class FrameBoxRow extends Gtk.ListBoxRow {
 
-    _init: function () {
+    _init () {
         this._box = new Gtk.Box({
             orientation: Gtk.Orientation.HORIZONTAL,
         });
@@ -138,19 +140,20 @@ var FrameBoxRow = new GObject.Class({
         this.parent({
             child: this._box
         });
-    },
+    }
 
-    add: function (widget) {
+    add (widget) {
         this._box.append(widget);
     }
 });
 
-const PrefsWidget = new GObject.Class({
-    Name: "Prefs.Widget",
+const PrefsWidget = GObject.registerClass({
     GTypeName: "PrefsWidget",
-    Extends: Gtk.Box,
+    //Name: "Prefs.Widget",
+}
+class PrefsWidgets extends Gtk.Box {
 
-    _init: function () {
+    _init () {
         this.parent({
             orientation: Gtk.Orientation.VERTICAL,
         });
@@ -177,11 +180,12 @@ const PrefsWidget = new GObject.Class({
     }
 });
 
-var SettingsPage = new GObject.Class({
-    Name: "SettingsPage",
-    Extends: NotebookPage,
+var SettingsPage = GObject.registerClass({
+    GTypeName: "SettingsPage",
+}
+class SettingsPage extends NotebookPage {
 
-    _init: function (settings) {
+    _init (settings) {
         this.parent(_("Settings"));
         this.settings = settings;
         this.desktopSettings = new Gio.Settings({
@@ -277,11 +281,12 @@ var SettingsPage = new GObject.Class({
     }
 });
 
-var IndicatorsPage = new GObject.Class({
-    Name: "IndicatorsPage",
-    Extends: NotebookPage,
+var IndicatorsPage = GObject.registerClass({
+    GTypeName: "IndicatorsPage",
+}
+class IndicatorsPage extends NotebookPage {
 
-    _init: function (settings, menuItems) {
+    _init (settings, menuItems) {
         this.parent(_("Position and size"));
         this.settings = settings;
         this.menuItems = menuItems;
@@ -367,10 +372,12 @@ var IndicatorsPage = new GObject.Class({
         // add the frames
         this.append(this.indicatorsFrame);
         this.spacingBox.show(); //add_actor(this.spacingRow);
-    },
-    getSpacingScale: function () {
-    },
-    buildList: function () {
+    }
+
+    getSpacingScale () {
+    }
+
+    buildList () {
 
         this.remove(this.indicatorsFrame);
         this.indicatorsFrame = new FrameBox(_("Indicators Order"));
@@ -467,12 +474,14 @@ var IndicatorsPage = new GObject.Class({
 
         this.indicatorsArray.push(positionRow);
         this.indicatorsArray.push(resetIndicatorsRow);
-    },
-    changeOrder: function (o, index, order) {
+    }
+
+    changeOrder (o, index, order) {
         this.menuItems.changeOrder(index, order);
         this.buildList();
-    },
-    changeEnable: function (object, p, index) {
+    }
+
+    changeEnable (object, p, index) {
         let items = this.menuItems.getItems();
         let item = items[index];
 
@@ -482,16 +491,19 @@ var IndicatorsPage = new GObject.Class({
        }
        else
             this.menuItems.changeEnable(index, object.active);
-    },
-    enableCenter: function (object, index) {
+    }
+
+    enableCenter (object, index) {
         this.menuItems.changePosition(index, object.get_active());
         this.changeOrder(null, index, -index);
-    },
-    resetPosition: function () {
+    }
+
+    resetPosition () {
         this.settings.set_value("items", this.settings.get_default_value("items"));
         this.buildList();
-    },
-    spacingEnable: function (object, p) {
+    }
+
+    spacingEnable (object, p) {
         if (object.active) {
             this.settings.set_boolean("activate-spacing", true);
             this.spacingRow.show();
@@ -500,8 +512,9 @@ var IndicatorsPage = new GObject.Class({
             this.spacingRow.hide();
             this.settings.set_boolean("activate-spacing", false);
 	}
-    },
-    separatingEnable: function (object, p) {
+    }
+
+    separatingEnable (object, p) {
         if (object.active) {
             this.settings.set_boolean("separate-date-and-notification" , true);
 	}
@@ -513,14 +526,15 @@ var IndicatorsPage = new GObject.Class({
 	    }
             this.settings.set_boolean("separate-date-and-notification" , false);
 	}
-    },
+    }
 });
 
-var AboutPage = new GObject.Class({
-    Name: "AboutPage",
-    Extends: NotebookPage,
+var AboutPage = GObject.registerClass({
+    GTypeName: "AboutPage",
+}
+class AboutPage extends NotebookPage {
 
-    _init: function (settings) {
+    _init (settings) {
         this.parent(_("About"));
         this.settings = settings;
 

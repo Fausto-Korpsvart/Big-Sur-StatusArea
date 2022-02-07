@@ -25,11 +25,12 @@ const _ = Gettext.gettext;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 
-var LightIndicator = new GObject.Class({
-    Name: "LightIndicator",
-    Extends: CustomButton,
+var LightIndicator = GObject.registerClass({
+    GTypeName: "LightIndicator",
+},
+class LightIndicator extends CustomButton {
 
-    _init: function () {
+    _init () {
         this.parent("LightIndicator");
         this.menu.actor.add_style_class_name("aggregate-menu");
     
@@ -44,8 +45,8 @@ var LightIndicator = new GObject.Class({
 
         this._separator = new PopupMenu.PopupSeparatorMenuItem();
         this.menu.addMenuItem(this._separator);
-    },
-    destroy: function () {
+    }
+    destroy () {
         this.box.remove_child(this._brightnessIcon);
         this.menu.box.remove_actor(this._brightness.menu.actor);
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._brightness.menu.actor);

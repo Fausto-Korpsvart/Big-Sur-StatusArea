@@ -25,10 +25,11 @@ const _ = Gettext.gettext;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 
-var CalendarIndicator = new GObject.Class({
-    Name: "CalendarIndicator",
-    Extends: CustomButton,
-    _init: function () {
+var CalendarIndicator = GObject.registerClass({
+    GTypeName: "CalendarIndicator",
+},
+class CalendarIndicator extends CustomButton {
+    _init () {
         this.parent("CalendarIndicator");
 
         this._clock = Main.panel.statusArea.dateMenu._clock;
@@ -126,9 +127,9 @@ var CalendarIndicator = new GObject.Class({
                 this._eventsSection.setDate(date);
             }
         );
-    },
+    }
 
-    override: function (format) {
+    override (format) {
         this.resetFormat();
         if (format == "") {
             return
@@ -142,22 +143,25 @@ var CalendarIndicator = new GObject.Class({
         this._clockIndicatorFormat.show();
         this._dateFormat = format;
         this.changeFormat();
-    },
-    changeFormat: function () {
+    }
+
+    changeFormat () {
         if (this._dateFormat && this._dateFormat != "") {
             let date = new Date();
             this._clockIndicatorFormat.set_text(date.toLocaleFormat(this._dateFormat));
         }
-    },
-    resetFormat: function () {
+    }
+
+    resetFormat () {
         if (this._formatChanged) {
             GLib.source_remove(this._formatChanged);
             this._formatChanged = null;
         }
         this._clockIndicator.show();
         this._clockIndicatorFormat.hide();
-    },
-    destroy: function () {
+    }
+
+    destroy () {
         this.resetFormat();
         this._calendar.disconnect(this._date_changed);
         

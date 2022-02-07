@@ -27,11 +27,12 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 
-var BluetoothIndicator = new GObject.Class({
+var BluetoothIndicator = GObject.registerClass({
     Name: "BluetoothIndicator",
-    Extends: CustomButton,
+},
+class BluetoothIndicator extends CustomButton {
 
-    _init: function () {
+    _init {
         this.parent("BluetoothIndicator");
         //this.menu.box.set_width(270);
         this.menu.actor.add_style_class_name("aggregate-menu");
@@ -86,8 +87,9 @@ var BluetoothIndicator = new GObject.Class({
 
         this._sync();
 
-    },
-    _sync: function () {
+    }
+
+    _sync () {
 
         let sensitive = !Main.sessionMode.isLocked && !Main.sessionMode.isGreeter;
         this.menu.setSensitive(sensitive);
@@ -113,8 +115,9 @@ var BluetoothIndicator = new GObject.Class({
             this._bluetooth._item.icon.icon_name = 'bluetooth-active-symbolic';
         }
 
-    },
-    destroy: function () {
+    }
+
+    destroy () {
         if (this._bluetooth) {
             this._bluetooth._proxy.disconnect(this._bluetooth_properties_changed);
         }
@@ -127,5 +130,5 @@ var BluetoothIndicator = new GObject.Class({
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._bluetooth.menu.actor);
         
         this.parent();
-    },
+    }
 });
