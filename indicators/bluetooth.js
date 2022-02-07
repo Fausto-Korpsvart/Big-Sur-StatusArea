@@ -28,7 +28,7 @@ const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 
 var BluetoothIndicator = GObject.registerClass({
-    Name: "BluetoothIndicator",
+    GTypeName: "BluetoothIndicator",
 },
 class BluetoothIndicator extends CustomButton {
 

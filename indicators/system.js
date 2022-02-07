@@ -29,7 +29,7 @@ const CustomButton = Extension.imports.indicators.button.CustomButton;
 var PANEL_ICON_SIZE = 16;
 
 var UserIndicator = GObject.registerClass({
-    Name: "UserIndicator",
+    GTypeName: "UserIndicator",
 },
 class UserIndicator extends CustomButton {
 
