@@ -294,7 +294,7 @@ class NotificationIndicator extends CustomButton {
 	this.removeCalendar();
         this._vbox.remove_child(this._messageList);
         this._messageListParent.add_actor(this._messageList);
-        super.close();
+        // super.close();
     }
 });
 

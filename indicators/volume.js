@@ -69,7 +69,7 @@ class VolumeIndicator extends CustomButton {
         //this._mediaSection.remove_style_class_name("music-box");
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._volume.menu.actor);
         //Main.panel.statusArea.dateMenu._messageList._addSection(this._mediaSection);
-        this.parent();
+        // super.close();
     }
 
     onScroll(event) {

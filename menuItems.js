@@ -18,10 +18,11 @@
 const GObject = imports.gi.GObject;
 
 var MenuItems = GObject.registerClass({
-    GTypeName: "MenuItems"
+    GTypeName: "MenuItems",
 },
-class MenuItems extends GObject.object {
+class MenuItems extends GObject.Object {
     _init (settings) {
+	super._init();
         this.settings = settings;
     }
 

@@ -50,7 +50,6 @@ class LightIndicator extends CustomButton {
         this.box.remove_child(this._brightnessIcon);
         this.menu.box.remove_actor(this._brightness.menu.actor);
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._brightness.menu.actor);
-        
-        super.close();
+        // super.close();
     }
 });
