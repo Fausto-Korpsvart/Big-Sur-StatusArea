@@ -34,7 +34,7 @@ var UserIndicator = GObject.registerClass({
 class UserIndicator extends CustomButton {
 
     _init () {
-        this.parent("UserIndicator");
+        super._init("UserIndicator");
         //this.menu.box.set_width(270);
         this.menu.actor.add_style_class_name("aggregate-menu");
         this._system = Main.panel.statusArea.aggregateMenu._system;
@@ -272,6 +272,6 @@ class UserIndicator extends CustomButton {
         this.menu.box.remove_actor(this._system.menu.actor);
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._system.menu.actor);
         
-        this.parent();
+        super.close();
     }
 });

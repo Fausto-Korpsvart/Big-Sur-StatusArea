@@ -32,11 +32,11 @@ var NightLightIndicator = GObject.registerClass({
 class NightLightIndicator extends CustomButton {
 
     _init () {
+        super._init("NightLightIndicator");
         
         this._min = 4700;
         this._max = 1700;
 
-        this.parent("NightLightIndicator");
         //this.menu.box.set_width(250);
         this.menu.actor.add_style_class_name("aggregate-menu");
 
@@ -142,6 +142,6 @@ class NightLightIndicator extends CustomButton {
         this.box.remove_child(this._nightLight._indicator);
         this._nightLight.hide();
         this._nightLight.add_actor(this._nightLight._indicator);
-        this.parent();
+        super.close();
     }
 });

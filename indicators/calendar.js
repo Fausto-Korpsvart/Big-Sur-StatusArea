@@ -30,7 +30,7 @@ var CalendarIndicator = GObject.registerClass({
 },
 class CalendarIndicator extends CustomButton {
     _init () {
-        this.parent("CalendarIndicator");
+        super._init("CalendarIndicator");
 
         this._clock = Main.panel.statusArea.dateMenu._clock;
         this._calendar = Main.panel.statusArea.dateMenu._calendar;
@@ -61,6 +61,7 @@ class CalendarIndicator extends CustomButton {
 
         let boxLayout;
         let vbox;
+        let hbox;
 
         hbox = new St.BoxLayout({ name: 'calendarArea' });
 
@@ -179,6 +180,6 @@ class CalendarIndicator extends CustomButton {
 
         this._indicatorParent.add_actor(this._clockIndicator);
 
-        this.parent();
+        super.close();
     }
 });

@@ -32,7 +32,7 @@ var VolumeIndicator = GObject.registerClass({
 class VolumeIndicator extends CustomButton {
 
     _init () {
-        this.parent("VolumeIndicator");
+        super._init("VolumeIndicator");
         this._settings = Convenience.getSettings();
         this.menu.actor.add_style_class_name("aggregate-menu");
         this._volume = Main.panel.statusArea.aggregateMenu._volume;

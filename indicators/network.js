@@ -32,7 +32,7 @@ var NetworkIndicator = GObject.registerClass({
 class NetworkIndicator extends CustomButton {
 
     _init () {
-        this.parent("NetworkIndicator");
+        super._init("NetworkIndicator");
         //this.menu.box.set_width(270);
         this.menu.actor.add_style_class_name("aggregate-menu");
 
@@ -175,6 +175,6 @@ class NetworkIndicator extends CustomButton {
         
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._network.menu.actor);
 
-        this.parent();
+        super.close();
     }
 });

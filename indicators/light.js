@@ -31,7 +31,7 @@ var LightIndicator = GObject.registerClass({
 class LightIndicator extends CustomButton {
 
     _init () {
-        this.parent("LightIndicator");
+        super._init("LightIndicator");
         this.menu.actor.add_style_class_name("aggregate-menu");
     
         this._brightness = Main.panel.statusArea.aggregateMenu._brightness;
@@ -51,6 +51,6 @@ class LightIndicator extends CustomButton {
         this.menu.box.remove_actor(this._brightness.menu.actor);
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._brightness.menu.actor);
         
-        this.parent();
+        super.close();
     }
 });

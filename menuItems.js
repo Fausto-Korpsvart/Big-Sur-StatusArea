@@ -15,23 +15,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-const Lang = imports.lang;
 const GObject = imports.gi.GObject;
 
 var MenuItems = GObject.registerClass({
     GTypeName: "MenuItems"
 },
-class MenuItems {
+class MenuItems extends GObject.object {
     _init (settings) {
         this.settings = settings;
     }
 
-    getItems () {
+    getItems() {
         let itemsString = this.settings.get_string("items");
         return this.itemsToArray(itemsString);
     }
 
-    itemsToArray (itemsString) {
+    itemsToArray(itemsString) {
         let items = itemsString.split("|");
         let itemsArray = new Array();
         for (let indexItem in items) {
@@ -47,7 +46,7 @@ class MenuItems {
         return itemsArray;
     }
 
-    changeOrder (index, posRel) {
+    changeOrder(index, posRel) {
         let items = this.getItems();
         if ((posRel < 0 && index > 0) || (posRel > 0 && index < (items.length - 1))) {
             let temp = items[index];
@@ -59,7 +58,7 @@ class MenuItems {
         return false;
     }
 
-    changeEnable (index, value) {
+    changeEnable(index, value) {
         let items = this.getItems();
         if (index < 0 && index >= items.length) {
             return false;
@@ -69,7 +68,7 @@ class MenuItems {
         return true;
     }
 
-    changePosition (index, value) {
+    changePosition(index, value) {
         let items = this.getItems();
         if (index < 0 && index >= items.length) {
             return false;
@@ -79,12 +78,12 @@ class MenuItems {
         return true;
     }
 
-    setItems (items) {
+    setItems(items) {
         let itemsString = this.itemsToString(items);
         this.settings.set_string("items", itemsString);
     }
 
-    itemsToString (itemsArray) {
+    itemsToString(itemsArray) {
         let items = new Array()
         for (let indexItem in itemsArray) {
             let itemDatasArray = itemsArray[indexItem];
@@ -94,7 +93,7 @@ class MenuItems {
         return items.join("|");
     }
 
-    getEnableItems {
+    getEnableItems() {
         let items = this.getItems();
         let indexItem;
         let itemsEnable = new Array();
@@ -107,7 +106,7 @@ class MenuItems {
         return itemsEnable;
     }
 
-    getCenterItems {
+    getCenterItems() {
         let items = this.getItems();
         let indexItem;
         let itemsEnable = new Array();

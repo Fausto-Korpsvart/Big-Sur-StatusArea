@@ -19,7 +19,6 @@
 const { Clutter, Gio, GLib, GnomeDesktop,
         GObject, GWeather, Pango, Shell, St } = imports.gi;
 const Main = imports.ui.main;
-const GObject = imports.gi.GObject;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Gettext = imports.gettext.domain("bigSur-StatusArea");
 const _ = Gettext.gettext;
@@ -30,7 +29,7 @@ const NoNotifications = 'task-past-due-symbolic';
 const NewNotifications = 'task-due-symbolic';
 
 
-var CalendarColumnLayout2 = GObject.registerregisterClass(
+var CalendarColumnLayout2 = GObject.registerClass({
     GTypeName: "CalendarColumnLayout2",
 },
 class CalendarColumnLayout2 extends Clutter.BoxLayout {
@@ -59,7 +58,7 @@ var NotificationIndicator = GObject.registerClass({
 class NotificationIndicator extends CustomButton {
 
     _init () {
-        this.parent("NotificationIndicator");
+        super._init("NotificationIndicator");
 
         settingsChanged = this.settings.connect("changed::separate-date-and-notification", this.applySettings);
 
@@ -295,16 +294,15 @@ class NotificationIndicator extends CustomButton {
 	this.removeCalendar();
         this._vbox.remove_child(this._messageList);
         this._messageListParent.add_actor(this._messageList);
-        this.parent();
+        super.close();
     }
 });
 
 var MessagesIndicator = GObject.registerClass({
     GTypeName: 'MessagesIndicator',
 },
-class MessagesIndicator {
-
-    _init (src, settings) {
+class MessagesIndicator extends GObject.Object {
+    _init(src, settings) {
         this.settings = settings;
         this._icon = new St.Icon({
             style_class: 'system-status-icon'
@@ -330,13 +328,13 @@ class MessagesIndicator {
         this._updateCount()
     }
 
-    _onSourceAdded (tray, source) {
+    _onSourceAdded(tray, source) {
         source.connect('notify::count', () => this._updateCount());
         this._sources.push(source);
         this._updateCount();
     }
 
-    _updateCount () {
+    _updateCount() {
         let count = 0;
 	let icon = null
         this._sources.forEach((source) => {
@@ -360,7 +358,7 @@ class MessagesIndicator {
         this.actor = this._icon;
     }
 
-    destroy () {
+    destroy() {
         Main.messageTray.disconnect(this._source_added);
         Main.messageTray.disconnect(this._source_removed);
         Main.messageTray.disconnect(this._queue_changed);

@@ -31,7 +31,7 @@ var PowerIndicator = GObject.registerClass({
 class PowerIndicator extends CustomButton {
 
     _init () {
-        this.parent("PowerIndicator");
+        super._init("PowerIndicator");
         this.menu.actor.add_style_class_name("aggregate-menu");
         this._power = Main.panel.statusArea.aggregateMenu._power;
         this._power.remove_actor(this._power._indicator);
@@ -124,6 +124,6 @@ class PowerIndicator extends CustomButton {
 
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._power.menu.actor);
         
-        this.parent();
+        super.close();
     }
 });

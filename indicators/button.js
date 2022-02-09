@@ -29,8 +29,8 @@ var CustomButton = GObject.registerClass({
 class CustomButton extends PanelMenu.Button {
 
     _init (name) {
+        super._init(0.5, name);
         this.settings = Convenience.getSettings();
-        this.parent(0.5, name);
         this.name = name;
         this._center = false;
         this.box = new St.BoxLayout({
@@ -73,6 +73,6 @@ class CustomButton extends PanelMenu.Button {
     }
 
     destroy () {
-        this.parent();
+        super.close();
     }
 });
