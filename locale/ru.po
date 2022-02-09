@@ -51,10 +51,6 @@ msgid "Indicators padding"
 msgstr "Расстояние между индикаторами"
 
 #: ../prefs.js:283
-msgid "Position and size"
-msgstr "Положение и размер"
-
-#: ../prefs.js:283
 msgid "Unified Calendar/Notification Indicator"
 msgstr "Единый индикатор календаря и уведомления"
 
