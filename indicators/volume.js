@@ -17,7 +17,7 @@
  */
 
 const { St, Shell, Clutter, Gio } = imports.gi;
-const Lang = imports.lang;
+const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
 const Gettext = imports.gettext.domain("bigSur-StatusArea");
@@ -26,12 +26,13 @@ const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 const Convenience = Extension.imports.convenience;
 
-var VolumeIndicator = new Lang.Class({
-    Name: "VolumeIndicator",
-    Extends: CustomButton,
+var VolumeIndicator = GObject.registerClass({
+    GTypeName: "VolumeIndicator",
+},
+class VolumeIndicator extends CustomButton {
 
-    _init: function () {
-        this.parent("VolumeIndicator");
+    _init () {
+        super._init("VolumeIndicator");
         this._settings = Convenience.getSettings();
         this.menu.actor.add_style_class_name("aggregate-menu");
         this._volume = Main.panel.statusArea.aggregateMenu._volume;
@@ -57,8 +58,9 @@ var VolumeIndicator = new Lang.Class({
         this.menu.addMenuItem(settings);
         // this.menu.box.connect("scroll-event", (actor, event) => this.onScroll(event));
         //this.menu.box.connect("scroll-event", (actor, event) => this._volume._volumeMenu.scrollOutput(event));
-    },
-    destroy: function () {
+    }
+
+    destroy () {
         //this._mediaSection.disconnect(this._mediaVisible);
         this.box.remove_child(this._volume._primaryIndicator);
         this.menu.box.remove_actor(this._volume.menu.actor);
@@ -67,9 +69,10 @@ var VolumeIndicator = new Lang.Class({
         //this._mediaSection.remove_style_class_name("music-box");
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._volume.menu.actor);
         //Main.panel.statusArea.dateMenu._messageList._addSection(this._mediaSection);
-        this.parent();
-    },
-    onScroll: function(event) {
+        // super.close();
+    }
+
+    onScroll(event) {
 	let result = this._volume._volumeMenu.scroll(event);
         if (result == Clutter.EVENT_PROPAGATE || this._volume.menu.actor.mapped)
              return result;

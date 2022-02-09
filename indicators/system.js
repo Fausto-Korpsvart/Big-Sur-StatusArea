@@ -19,7 +19,7 @@
 const { AccountsService, Clutter, GLib, St, Gio } = imports.gi;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
-const Lang = imports.lang;
+const GObject = imports.gi.GObject;
 const Gettext = imports.gettext.domain("bigSur-StatusArea");
 const _ = Gettext.gettext;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
@@ -28,12 +28,13 @@ const CustomButton = Extension.imports.indicators.button.CustomButton;
 
 var PANEL_ICON_SIZE = 16;
 
-var UserIndicator = new Lang.Class({
-    Name: "UserIndicator",
-    Extends: CustomButton,
+var UserIndicator = GObject.registerClass({
+    GTypeName: "UserIndicator",
+},
+class UserIndicator extends CustomButton {
 
-    _init: function () {
-        this.parent("UserIndicator");
+    _init () {
+        super._init("UserIndicator");
         //this.menu.box.set_width(270);
         this.menu.actor.add_style_class_name("aggregate-menu");
         this._system = Main.panel.statusArea.aggregateMenu._system;
@@ -62,8 +63,8 @@ var UserIndicator = new Lang.Class({
         Main.panel.statusArea.aggregateMenu.menu.box.remove_actor(this._system.menu.actor);
         //IS THIS NEEDED?
         // this.menu.addMenuItem(this._system.menu);
-    },
-    _createSubMenu: function () {
+    }
+    _createSubMenu () {
 
         this._switchUserSubMenu = new PopupMenu.PopupSubMenuMenuItem('', true);
         this._switchUserSubMenu.icon.icon_name = 'avatar-default-symbolic';
@@ -248,14 +249,16 @@ var UserIndicator = new Lang.Class({
         // if (!this._system._powerOffAction.visible) {
         //     power.actor.hide();
         // }
-    },
-    changeLabel: function (label) {
+    }
+
+    changeLabel (label) {
         if (label == "") {
             label = GLib.get_real_name();
         }
         this._nameLabel.set_text(label);
-    },
-    changeIcon: function (enabled) {
+    }
+
+    changeIcon (enabled) {
         if (enabled) {
             this._powerIcon.show();
             this._nameLabel.hide();
@@ -263,11 +266,12 @@ var UserIndicator = new Lang.Class({
             this._powerIcon.hide();
             this._nameLabel.show();
         }
-    },
-    destroy: function () {
+    }
+
+    destroy () {
         this.menu.box.remove_actor(this._system.menu.actor);
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._system.menu.actor);
         
-        this.parent();
+        // super.close();
     }
 });

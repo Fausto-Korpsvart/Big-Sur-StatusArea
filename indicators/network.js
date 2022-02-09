@@ -17,7 +17,7 @@
  */
 
 const { St } = imports.gi;
-const Lang = imports.lang;
+const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const Config = imports.misc.config;
 const PopupMenu = imports.ui.popupMenu;
@@ -26,12 +26,13 @@ const _ = Gettext.gettext;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 
-var NetworkIndicator = new Lang.Class({
-    Name: "NetworkIndicator",
-    Extends: CustomButton,
+var NetworkIndicator = GObject.registerClass({
+    GTypeName: "NetworkIndicator",
+},
+class NetworkIndicator extends CustomButton {
 
-    _init: function () {
-        this.parent("NetworkIndicator");
+    _init () {
+        super._init("NetworkIndicator");
         //this.menu.box.set_width(270);
         this.menu.actor.add_style_class_name("aggregate-menu");
 
@@ -96,8 +97,9 @@ var NetworkIndicator = new Lang.Class({
 
         Main.sessionMode.connect('updated', () => this._sync());
 
-    },
-    _sync: function () {
+    }
+
+    _sync () {
         this._arrowIcon.hide();
         if (!this._network._primaryIndicator.visible &&
             !this._network._vpnIndicator.visible) {
@@ -144,8 +146,9 @@ var NetworkIndicator = new Lang.Class({
 	          var child = this.box.get_child_at_index(1);
                   this.box.remove_child(child);
 	    }*/
-    },
-    destroy: function () {
+    }
+
+    destroy () {
         this._rfkill._manager._proxy.disconnect(this._rfkill_properties_changed);
         if (this._network) {
             this._network._primaryIndicator.disconnect(this._network_notify);
@@ -172,6 +175,6 @@ var NetworkIndicator = new Lang.Class({
         
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._network.menu.actor);
 
-        this.parent();
-    },
+        // super.close();
+    }
 });

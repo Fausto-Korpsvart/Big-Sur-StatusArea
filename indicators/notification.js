@@ -19,7 +19,6 @@
 const { Clutter, Gio, GLib, GnomeDesktop,
         GObject, GWeather, Pango, Shell, St } = imports.gi;
 const Main = imports.ui.main;
-const Lang = imports.lang;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Gettext = imports.gettext.domain("bigSur-StatusArea");
 const _ = Gettext.gettext;
@@ -30,7 +29,9 @@ const NoNotifications = 'task-past-due-symbolic';
 const NewNotifications = 'task-due-symbolic';
 
 
-var CalendarColumnLayout2 = GObject.registerClass(
+var CalendarColumnLayout2 = GObject.registerClass({
+    GTypeName: "CalendarColumnLayout2",
+},
 class CalendarColumnLayout2 extends Clutter.BoxLayout {
     _init(actors) {
         super._init({ orientation: Clutter.Orientation.VERTICAL });
@@ -51,12 +52,13 @@ class CalendarColumnLayout2 extends Clutter.BoxLayout {
 
 var settingsChanged = null;
 
-var NotificationIndicator = new Lang.Class({
-    Name: "NotificationIndicator",
-    Extends: CustomButton,
+var NotificationIndicator = GObject.registerClass({
+    GTypeName: "NotificationIndicator",
+},
+class NotificationIndicator extends CustomButton {
 
-    _init: function () {
-        this.parent("NotificationIndicator");
+    _init () {
+        super._init("NotificationIndicator");
 
         settingsChanged = this.settings.connect("changed::separate-date-and-notification", this.applySettings);
 
@@ -110,16 +112,18 @@ var NotificationIndicator = new Lang.Class({
             }
         });
 
-    },
-    setHide: function (value) {
+    }
+
+    setHide (value) {
         this._autoHide = value
         if (!value) {
             this.actor.show();
         } else if (this._indicator._sources == "") {
             this.actor.hide();
         }
-    },
-    applySettings: function () {
+    }
+
+    applySettings () {
         if (this.settings.get_boolean("separate-date-and-notification")) {
              this.prepareCalendar();
              this.addCalendar();
@@ -127,8 +131,9 @@ var NotificationIndicator = new Lang.Class({
 	else {
              this.removeCalendar();
 	}
-    },
-    prepareCalendar: function () {
+    }
+
+    prepareCalendar () {
         if (!this.settings.get_boolean("separate-date-and-notification")) {
 			this._calendar = Main.panel.statusArea.dateMenu._calendar;
 			this._date = Main.panel.statusArea.dateMenu._date;
@@ -158,8 +163,9 @@ var NotificationIndicator = new Lang.Class({
 			this.box.add_child(this._clockIndicator, 0);
         	this.box.add_child(this._clockIndicatorFormat, 0);
         }   
-    },
-    addCalendar: function () {
+    }
+
+    addCalendar () {
         if (!this.settings.get_boolean("separate-date-and-notification")) {
 		this._vboxd.show();
                 let now = new Date();
@@ -222,8 +228,9 @@ var NotificationIndicator = new Lang.Class({
         }
 	else
 	        this._vboxd.hide();
-    },
-    override: function (format) {
+    }
+
+    override (format) {
         if (!this.settings.get_boolean("separate-date-and-notification")) {
                 this.resetFormat();
                 if (format == "") {
@@ -239,16 +246,18 @@ var NotificationIndicator = new Lang.Class({
                 this._dateFormat = format;
                 this.changeFormat();
 	}
-    },
-    changeFormat: function () {
+    }
+
+    changeFormat () {
         if (!this.settings.get_boolean("separate-date-and-notification")) {
                if (this._dateFormat && this._dateFormat != "") {
                      let date = new Date();
                      this._clockIndicatorFormat.set_text(date.toLocaleFormat(this._dateFormat));
                }
 	}
-    },
-    resetFormat: function () {
+    }
+
+    resetFormat () {
         if (!this.settings.get_boolean("separate-date-and-notification")) {
                 if (this._formatChanged) {
                      GLib.source_remove(this._formatChanged);
@@ -257,8 +266,9 @@ var NotificationIndicator = new Lang.Class({
                 this._clockIndicator.show();
                 this._clockIndicatorFormat.hide();
 	}
-    },
-    removeCalendar: function () {
+    }
+
+    removeCalendar () {
         if (!this.settings.get_boolean("separate-date-and-notification")) {
 			this.resetFormat();
 			this._calendar.disconnect(this._date_changed);
@@ -276,22 +286,23 @@ var NotificationIndicator = new Lang.Class({
 			this._sectionParent.add_child(this._clocksSection);
 			this._calendarParent.add_child(this._calendar);
         }
-    },
+    }
 
-    destroy: function () {
+    destroy () {
         this._closeButton.disconnect(this._hideIndicator);
         this.settings.disconnect(settingsChanged);
 	this.removeCalendar();
         this._vbox.remove_child(this._messageList);
         this._messageListParent.add_actor(this._messageList);
-        this.parent();
+        // super.close();
     }
 });
 
-var MessagesIndicator = new Lang.Class({
-    Name: 'MessagesIndicator',
-
-    _init: function (src, settings) {
+var MessagesIndicator = GObject.registerClass({
+    GTypeName: 'MessagesIndicator',
+},
+class MessagesIndicator extends GObject.Object {
+    _init(src, settings) {
         this.settings = settings;
         this._icon = new St.Icon({
             style_class: 'system-status-icon'
@@ -315,13 +326,15 @@ var MessagesIndicator = new Lang.Class({
             this._onSourceAdded(null, source);
         });
         this._updateCount()
-    },
-    _onSourceAdded: function (tray, source) {
+    }
+
+    _onSourceAdded(tray, source) {
         source.connect('notify::count', () => this._updateCount());
         this._sources.push(source);
         this._updateCount();
-    },
-    _updateCount: function () {
+    }
+
+    _updateCount() {
         let count = 0;
 	let icon = null
         this._sources.forEach((source) => {
@@ -343,10 +356,11 @@ var MessagesIndicator = new Lang.Class({
 	}
 
         this.actor = this._icon;
-    },
-    destroy: function () {
+    }
+
+    destroy() {
         Main.messageTray.disconnect(this._source_added);
         Main.messageTray.disconnect(this._source_removed);
         Main.messageTray.disconnect(this._queue_changed);
-    },
+    }
 });

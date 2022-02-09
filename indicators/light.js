@@ -17,7 +17,7 @@
  */
 
 const { St, UPowerGlib, Clutter } = imports.gi;
-const Lang = imports.lang;
+const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
 const Gettext = imports.gettext.domain("bigSur-StatusArea");
@@ -25,12 +25,13 @@ const _ = Gettext.gettext;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 
-var LightIndicator = new Lang.Class({
-    Name: "LightIndicator",
-    Extends: CustomButton,
+var LightIndicator = GObject.registerClass({
+    GTypeName: "LightIndicator",
+},
+class LightIndicator extends CustomButton {
 
-    _init: function () {
-        this.parent("LightIndicator");
+    _init () {
+        super._init("LightIndicator");
         this.menu.actor.add_style_class_name("aggregate-menu");
     
         this._brightness = Main.panel.statusArea.aggregateMenu._brightness;
@@ -44,12 +45,11 @@ var LightIndicator = new Lang.Class({
 
         this._separator = new PopupMenu.PopupSeparatorMenuItem();
         this.menu.addMenuItem(this._separator);
-    },
-    destroy: function () {
+    }
+    destroy () {
         this.box.remove_child(this._brightnessIcon);
         this.menu.box.remove_actor(this._brightness.menu.actor);
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._brightness.menu.actor);
-        
-        this.parent();
+        // super.close();
     }
 });

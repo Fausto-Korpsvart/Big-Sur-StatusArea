@@ -17,7 +17,7 @@
  */
 
 const { St, UPowerGlib, Clutter } = imports.gi;
-const Lang = imports.lang;
+const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
 const Gettext = imports.gettext.domain("bigSur-StatusArea");
@@ -25,12 +25,13 @@ const _ = Gettext.gettext;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 
-var PowerIndicator = new Lang.Class({
+var PowerIndicator = GObject.registerClass({
     Name: "PowerIndicator",
-    Extends: CustomButton,
+},
+class PowerIndicator extends CustomButton {
 
-    _init: function () {
-        this.parent("PowerIndicator");
+    _init () {
+        super._init("PowerIndicator");
         this.menu.actor.add_style_class_name("aggregate-menu");
         this._power = Main.panel.statusArea.aggregateMenu._power;
         this._power.remove_actor(this._power._indicator);
@@ -60,8 +61,9 @@ var PowerIndicator = new Lang.Class({
         this._properties_changed = this._power._proxy.connect("g-properties-changed", () => this._sync());
         this._show_battery_signal = this._power._desktopSettings.connect("changed::show-battery-percentage", () => this._sync());
         this._sync();
-    },
-    _sync: function () {
+    }
+
+    _sync () {
         let powertype = this._power._proxy.IsPresent;
         if (!powertype) {
             this._power._indicator.hide();
@@ -93,22 +95,26 @@ var PowerIndicator = new Lang.Class({
 
         }
         this._label.set_text(this._power._getStatus());
-    },
-    showPercentageLabel: function (status) {
+    }
+
+    showPercentageLabel (status) {
         this._power._desktopSettings.set_boolean(status);
         this._sync();
-    },
-    setHideOnFull: function (status) {
+    }
+
+    setHideOnFull (status) {
         this._hideOnFull = status;
         this._sync();
-    },
-    setHideOnPercent: function (status, percent, element) {
+    }
+
+    setHideOnPercent (status, percent, element) {
         this._actor = (element == 0) ? this.actor : this._percentageLabel;
         this._hideOnPercent = status;
         this._hideWhenPercent = percent;
         this._sync();
-    },
-    destroy: function () {
+    }
+
+    destroy () {
         this._power._proxy.disconnect(this._properties_changed);
         this._power._desktopSettings.disconnect(this._show_battery_signal);
 
@@ -118,6 +124,6 @@ var PowerIndicator = new Lang.Class({
 
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._power.menu.actor);
         
-        this.parent();
+        // super.close();
     }
 });

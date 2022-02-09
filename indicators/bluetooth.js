@@ -17,7 +17,7 @@
  */
 
 const { St, Gio, GnomeBluetooth } = imports.gi;
-const Lang = imports.lang;
+const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const Config = imports.misc.config;
 const PopupMenu = imports.ui.popupMenu;
@@ -27,12 +27,13 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 
-var BluetoothIndicator = new Lang.Class({
-    Name: "BluetoothIndicator",
-    Extends: CustomButton,
+var BluetoothIndicator = GObject.registerClass({
+    GTypeName: "BluetoothIndicator",
+},
+class BluetoothIndicator extends CustomButton {
 
-    _init: function () {
-        this.parent("BluetoothIndicator");
+    _init() {
+        super._init("BluetoothIndicator");
         //this.menu.box.set_width(270);
         this.menu.actor.add_style_class_name("aggregate-menu");
 
@@ -86,8 +87,9 @@ var BluetoothIndicator = new Lang.Class({
 
         this._sync();
 
-    },
-    _sync: function () {
+    }
+
+    _sync() {
 
         let sensitive = !Main.sessionMode.isLocked && !Main.sessionMode.isGreeter;
         this.menu.setSensitive(sensitive);
@@ -113,8 +115,9 @@ var BluetoothIndicator = new Lang.Class({
             this._bluetooth._item.icon.icon_name = 'bluetooth-active-symbolic';
         }
 
-    },
-    destroy: function () {
+    }
+
+    destroy() {
         if (this._bluetooth) {
             this._bluetooth._proxy.disconnect(this._bluetooth_properties_changed);
         }
@@ -126,6 +129,6 @@ var BluetoothIndicator = new Lang.Class({
 
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._bluetooth.menu.actor);
         
-        this.parent();
-    },
+        // super.close();
+    }
 });

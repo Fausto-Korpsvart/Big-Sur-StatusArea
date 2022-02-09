@@ -17,7 +17,7 @@
  */
 
 const { St, Gtk, GLib, Clutter, Gio, Shell } = imports.gi;
-const Lang = imports.lang;
+const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
 const Gettext = imports.gettext.domain("bigSur-StatusArea");
@@ -25,11 +25,12 @@ const _ = Gettext.gettext;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 
-var CalendarIndicator = new Lang.Class({
-    Name: "CalendarIndicator",
-    Extends: CustomButton,
-    _init: function () {
-        this.parent("CalendarIndicator");
+var CalendarIndicator = GObject.registerClass({
+    GTypeName: "CalendarIndicator",
+},
+class CalendarIndicator extends CustomButton {
+    _init () {
+        super._init("CalendarIndicator");
 
         this._clock = Main.panel.statusArea.dateMenu._clock;
         this._calendar = Main.panel.statusArea.dateMenu._calendar;
@@ -60,6 +61,7 @@ var CalendarIndicator = new Lang.Class({
 
         let boxLayout;
         let vbox;
+        let hbox;
 
         hbox = new St.BoxLayout({ name: 'calendarArea' });
 
@@ -126,9 +128,9 @@ var CalendarIndicator = new Lang.Class({
                 this._eventsSection.setDate(date);
             }
         );
-    },
+    }
 
-    override: function (format) {
+    override (format) {
         this.resetFormat();
         if (format == "") {
             return
@@ -142,22 +144,25 @@ var CalendarIndicator = new Lang.Class({
         this._clockIndicatorFormat.show();
         this._dateFormat = format;
         this.changeFormat();
-    },
-    changeFormat: function () {
+    }
+
+    changeFormat () {
         if (this._dateFormat && this._dateFormat != "") {
             let date = new Date();
             this._clockIndicatorFormat.set_text(date.toLocaleFormat(this._dateFormat));
         }
-    },
-    resetFormat: function () {
+    }
+
+    resetFormat () {
         if (this._formatChanged) {
             GLib.source_remove(this._formatChanged);
             this._formatChanged = null;
         }
         this._clockIndicator.show();
         this._clockIndicatorFormat.hide();
-    },
-    destroy: function () {
+    }
+
+    destroy () {
         this.resetFormat();
         this._calendar.disconnect(this._date_changed);
         
@@ -175,6 +180,6 @@ var CalendarIndicator = new Lang.Class({
 
         this._indicatorParent.add_actor(this._clockIndicator);
 
-        this.parent();
+        // super.close();
     }
 });
