@@ -37,11 +37,11 @@ function init() {
 
 const IconButton = GObject.registerClass({
     GTypeName: "IconButton",
-}
+},
 class IconButton extends Gtk.Button {
 
     _init (params) {
-        this.parent({});
+        super._init({});
         if (params["circular"]) {
             let context = this.get_style_context();
             context.add_class("circular");
@@ -58,7 +58,7 @@ class IconButton extends Gtk.Button {
 
 var DialogWindow = GObject.registerClass({
     GTypeName: "DialogWindow",
-}
+},
 class DialogWindow extends Gtk.Dialog {
 
     _init (title, parent) {
@@ -86,11 +86,11 @@ class DialogWindow extends Gtk.Dialog {
 const NotebookPage = GObject.registerClass({
     GTypeName: "NotebookPage",
     
-}
+},
 class NotebookPage extends Gtk.Box {
 
     _init  (title) {
-        this.parent({
+        super._init({
             orientation: Gtk.Orientation.VERTICAL,
         });
         // this.set_margin(24);
@@ -107,13 +107,13 @@ class NotebookPage extends Gtk.Box {
 var FrameBox = GObject.registerClass({
     GTypeName: "FrameBox",
    
-}
+},
 class FrameBox extends Gtk.Frame {
 
     _init (label) {
         this._listBox = new Gtk.ListBox();
         this._listBox.set_selection_mode(Gtk.SelectionMode.NONE);
-        this.parent({
+        super._init({
             child: this._listBox
         });
         // label_yalign: 0.50;
@@ -127,7 +127,7 @@ class FrameBox extends Gtk.Frame {
 
 var FrameBoxRow = GObject.registerClass({
     GTypeName: "FrameBoxRow",
-}
+},
 class FrameBoxRow extends Gtk.ListBoxRow {
 
     _init () {
@@ -137,7 +137,7 @@ class FrameBoxRow extends Gtk.ListBoxRow {
         //this.set_margin(5);
         //this.set_row_spacing(20);
         //this.set_column_spacing(20);
-        this.parent({
+        super._init({
             child: this._box
         });
     }
@@ -150,11 +150,11 @@ class FrameBoxRow extends Gtk.ListBoxRow {
 const PrefsWidget = GObject.registerClass({
     GTypeName: "PrefsWidget",
     //Name: "Prefs.Widget",
-}
+},
 class PrefsWidgets extends Gtk.Box {
 
     _init () {
-        this.parent({
+        super._init({
             orientation: Gtk.Orientation.VERTICAL,
         });
         this.set_spacing(5);
@@ -182,11 +182,11 @@ class PrefsWidgets extends Gtk.Box {
 
 var SettingsPage = GObject.registerClass({
     GTypeName: "SettingsPage",
-}
+},
 class SettingsPage extends NotebookPage {
 
     _init (settings) {
-        this.parent(_("Settings"));
+        super._init(_("Settings"));
         this.settings = settings;
         this.desktopSettings = new Gio.Settings({
             schema_id: "org.gnome.desktop.interface"
@@ -283,11 +283,11 @@ class SettingsPage extends NotebookPage {
 
 var IndicatorsPage = GObject.registerClass({
     GTypeName: "IndicatorsPage",
-}
+},
 class IndicatorsPage extends NotebookPage {
 
     _init (settings, menuItems) {
-        this.parent(_("Position and size"));
+        super._init(_("Position and size"));
         this.settings = settings;
         this.menuItems = menuItems;
 
@@ -331,7 +331,7 @@ class IndicatorsPage extends NotebookPage {
             value_pos: Gtk.PositionType.RIGHT
         });
         this.spacingScale.connect("value-changed", function (scale, value) {
-            return value.toString() + " px";
+            return (value ? value.toString(): "0") + " px";
         });
         this.spacingScale.add_mark(9, Gtk.PositionType.BOTTOM, "");
         this.spacingScale.set_value(this.settings.get_int("spacing"));
@@ -483,8 +483,10 @@ class IndicatorsPage extends NotebookPage {
 
     changeEnable (object, p, index) {
         let items = this.menuItems.getItems();
+	if (items.length == 0) return;
         let item = items[index];
-
+        if (!item) return;
+        
         if (_(item["label"]) == _("Calendar") &&
            !this.settings.get_boolean("separate-date-and-notification")) {
             object.set_active(false);
@@ -531,11 +533,11 @@ class IndicatorsPage extends NotebookPage {
 
 var AboutPage = GObject.registerClass({
     GTypeName: "AboutPage",
-}
+},
 class AboutPage extends NotebookPage {
 
     _init (settings) {
-        this.parent(_("About"));
+        super._init(_("About"));
         this.settings = settings;
 
         let releaseVersion = Me.metadata["version"];
