@@ -52,7 +52,7 @@ msgstr "Расстояние между индикаторами"
 
 #: ../prefs.js:283
 msgid "Unified Calendar/Notification Indicator"
-msgstr "Единый индикатор календаря и уведомления"
+msgstr "Единый индикатор календаря и уведомлений"
 
 #: ../prefs.js:330
 msgid "Indicators Order"
@@ -121,7 +121,7 @@ msgstr "Температура"
 
 #: ../indicators/nightlight.js:88 ../indicators/nightlight.js:132
 msgid "Resume"
-msgstr "Продолжить"
+msgstr "Возобновить"
 
 #: ../indicators/nightlight.js:92 ../indicators/nightlight.js:128
 msgid "Turn Off"
@@ -137,11 +137,11 @@ msgstr "Включить"
 
 #: ../indicators/nightlight.js:131
 msgid "Night Light Disabled"
-msgstr "Ночной свет выключен"
+msgstr "Ночной свет не используется"
 
 #: ../indicators/nightlight.js:131
 msgid "Night Light On"
-msgstr "Ночной свет включен"
+msgstr "Ночной свет используется"
 
 #: ../indicators/nightlight.js:132
 msgid "Disable Until Tomorrow"
@@ -173,7 +173,7 @@ msgstr "Сменить пользователя"
 
 #: ../indicators/system.js:159
 msgid "Orientation Lock"
-msgstr "Блокировать поворот"
+msgstr "Блокировка ориентации"
 
 #: ../indicators/system.js:180
 msgid "Suspend"
@@ -189,7 +189,7 @@ msgstr "Перезагрузить"
 
 #: ../indicators/volume.js:66
 msgid "Volume Settings"
-msgstr "Настройки громкости"
+msgstr "Настройки звука"
 
 #: schemas.xml
 msgid "Calendar"
@@ -228,4 +228,3 @@ msgid ""
 msgstr ""
 "Включить раздельные индикаторы для календаря и уведомлений (требует "
 "перезапуск GNOME)"
-
