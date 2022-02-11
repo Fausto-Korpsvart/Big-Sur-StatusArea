@@ -272,6 +272,6 @@ class UserIndicator extends CustomButton {
         this.menu.box.remove_actor(this._system.menu.actor);
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._system.menu.actor);
         
-        // super.close();
+        super.destroy()
     }
 });

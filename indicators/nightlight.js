@@ -142,6 +142,6 @@ class NightLightIndicator extends CustomButton {
         this.box.remove_child(this._nightLight._indicator);
         this._nightLight.hide();
         this._nightLight.add_actor(this._nightLight._indicator);
-        // super.close();
+        super.destroy()
     }
 });

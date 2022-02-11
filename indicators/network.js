@@ -175,6 +175,6 @@ class NetworkIndicator extends CustomButton {
         
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._network.menu.actor);
 
-        // super.close();
+        super.destroy()
     }
 });

@@ -124,6 +124,6 @@ class PowerIndicator extends CustomButton {
 
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._power.menu.actor);
         
-        // super.close();
+        super.destroy()
     }
 });

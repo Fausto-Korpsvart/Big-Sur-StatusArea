@@ -129,6 +129,6 @@ class BluetoothIndicator extends CustomButton {
 
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._bluetooth.menu.actor);
         
-        // super.close();
+        super.destroy()
     }
 });
