@@ -180,6 +180,6 @@ class CalendarIndicator extends CustomButton {
 
         this._indicatorParent.add_actor(this._clockIndicator);
 
-        // super.close();
+        super.destroy()
     }
 });

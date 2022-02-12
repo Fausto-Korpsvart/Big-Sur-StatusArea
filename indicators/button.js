@@ -73,6 +73,6 @@ class CustomButton extends PanelMenu.Button {
     }
 
     destroy () {
-        super.close();
+        super.destroy()
     }
 });
