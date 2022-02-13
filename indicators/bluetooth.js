@@ -104,10 +104,10 @@ class BluetoothIndicator extends CustomButton {
             // Paired
             this._indicator.gicon = this._bluetooth_paired_gicon;
             this._bluetooth._item.icon.gicon = this._bluetooth_paired_gicon;
-        } else if (nConnectedDevices == -1) {
+        } else if (adapter === null) {
             // Off
             this._bluetooth._item.actor.show();
-	    this._indicator.icon_name = 'bluetooth-disabled-symbolic';	
+	        this._indicator.icon_name = 'bluetooth-disabled-symbolic';	
             this._bluetooth._item.icon.icon_name = 'bluetooth-disabled-symbolic';	
         } else {
             // On
