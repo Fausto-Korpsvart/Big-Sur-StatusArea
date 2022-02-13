@@ -101,7 +101,7 @@ msgstr ""
 
 #: ../indicators/bluetooth.js:70
 msgid "Bluetooth Settings"
-msgstr "Настройки Bluetooth"
+msgstr "Параметры Bluetooth"
 
 #: ../indicators/calendar.js:101
 msgid "No Events"
@@ -113,7 +113,7 @@ msgstr "Настройки даты и времени"
 
 #: ../indicators/network.js:79
 msgid "Network Settings"
-msgstr "Настройки сети"
+msgstr "Параметры сети"
 
 #: ../indicators/nightlight.js:70
 msgid "Temperature"
@@ -121,15 +121,15 @@ msgstr "Температура"
 
 #: ../indicators/nightlight.js:88 ../indicators/nightlight.js:132
 msgid "Resume"
-msgstr "Возобновить"
+msgstr "Включить снова"
 
 #: ../indicators/nightlight.js:92 ../indicators/nightlight.js:128
 msgid "Turn Off"
-msgstr "Выключить"
+msgstr "Выключить навсегда"
 
 #: ../indicators/nightlight.js:96
 msgid "Display Settings"
-msgstr "Настройки дисплея"
+msgstr "Параметры дисплея"
 
 #: ../indicators/nightlight.js:128
 msgid "Turn On"
@@ -157,11 +157,11 @@ msgstr "Выйти"
 
 #: ../indicators/system.js:83
 msgid "Account Settings"
-msgstr "Настройки пользователей"
+msgstr "Пользователи"
 
 #: ../indicators/system.js:94
 msgid "System Settings"
-msgstr "Настройки системы"
+msgstr "Параметры"
 
 #: ../indicators/system.js:114
 msgid "Lock"
@@ -181,15 +181,15 @@ msgstr "Сон"
 
 #: ../indicators/system.js:201
 msgid "Power Off"
-msgstr "Выключить"
+msgstr "Выключение"
 
 #: ../indicators/system.js:201
 msgid "Restart"
-msgstr "Перезагрузить"
+msgstr "Перезапуск"
 
 #: ../indicators/volume.js:66
 msgid "Volume Settings"
-msgstr "Настройки звука"
+msgstr "Параметры звука"
 
 #: schemas.xml
 msgid "Calendar"
