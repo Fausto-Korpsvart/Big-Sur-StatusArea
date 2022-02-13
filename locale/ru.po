@@ -129,7 +129,7 @@ msgstr "Выключить навсегда"
 
 #: ../indicators/nightlight.js:96
 msgid "Display Settings"
-msgstr "Дисплеи"
+msgstr "Параметры дисплея"
 
 #: ../indicators/nightlight.js:128
 msgid "Turn On"
