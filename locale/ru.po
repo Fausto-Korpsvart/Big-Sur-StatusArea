@@ -101,7 +101,7 @@ msgstr ""
 
 #: ../indicators/bluetooth.js:70
 msgid "Bluetooth Settings"
-msgstr "Bluetooth"
+msgstr "Параметры Bluetooth"
 
 #: ../indicators/calendar.js:101
 msgid "No Events"
@@ -113,7 +113,7 @@ msgstr "Настройки даты и времени"
 
 #: ../indicators/network.js:79
 msgid "Network Settings"
-msgstr "Сеть"
+msgstr "Параметры сети"
 
 #: ../indicators/nightlight.js:70
 msgid "Temperature"
@@ -189,7 +189,7 @@ msgstr "Перезапуск"
 
 #: ../indicators/volume.js:66
 msgid "Volume Settings"
-msgstr "Звук"
+msgstr "Параметры звука"
 
 #: schemas.xml
 msgid "Calendar"
