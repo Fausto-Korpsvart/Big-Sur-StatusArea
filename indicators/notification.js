@@ -17,7 +17,7 @@
  */
 
 const { Clutter, Gio, GLib, GnomeDesktop,
-        GObject, GWeather, Pango, Shell, St } = imports.gi;
+GObject, GWeather, Pango, Shell, St } = imports.gi;
 const Main = imports.ui.main;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Gettext = imports.gettext.domain("bigSur-StatusArea");
@@ -25,8 +25,9 @@ const _ = Gettext.gettext;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 
-const NoNotifications = 'task-past-due-symbolic';
-const NewNotifications = 'task-due-symbolic';
+const NoNotifications = `${Me.path}/icons/notification-symbolic.svg`
+const Notifications = `${Me.path}/icons/notification-new-symbolic.svg`
+const NotificationsDisabled = `${Me.path}/icons/notification-disabled-symbolic.svg`
 
 
 var CalendarColumnLayout2 = GObject.registerClass({
@@ -291,7 +292,7 @@ class NotificationIndicator extends CustomButton {
     destroy () {
         this._closeButton.disconnect(this._hideIndicator);
         this.settings.disconnect(settingsChanged);
-	this.removeCalendar();
+	    this.removeCalendar();
         this._vbox.remove_child(this._messageList);
         this._messageListParent.add_actor(this._messageList);
         super.destroy()
@@ -308,10 +309,14 @@ class MessagesIndicator extends GObject.Object {
             style_class: 'system-status-icon'
         });
 
-	this._icon.icon_name = NoNotifications;
-
+        this._Notifications_gicon = Gio.icon_new_for_string(NoNotifications);
+        this._NewNotifications_gicon = Gio.icon_new_for_string(Notifications);
+        this._settings = new Gio.Settings({
+            schema_id: 'org.gnome.desktop.notifications',
+        });
+        this._settings.connect('changed::show-banners', this._updateCount.bind(this));
+        this._icon.gicon = this._Notifications_gicon
         this.actor = this._icon;
-
         this._sources = src;
 
         this._source_added = Main.messageTray.connect('source-added', (t, source) => this._onSourceAdded(t, source));
@@ -336,25 +341,30 @@ class MessagesIndicator extends GObject.Object {
 
     _updateCount() {
         let count = 0;
-	let icon = null
+	    let icon = null
         this._sources.forEach((source) => {
             count += source.count;
         });
        
         if (this.settings.get_boolean("separate-date-and-notification")) {
-            icon = (count > 0) ? NewNotifications : NoNotifications;
-            this._icon.icon_name = icon;
-	}
-	else {
-	    if (count > 0) {
-                 this._icon.icon_name = 'media-record-symbolic';
-                 this._icon.show();
+            if (!this._settings.get_boolean('show-banners')) {
+                this._icon.gicon = Gio.icon_new_for_string(NotificationsDisabled);
+            } else {
+                this._icon.gicon = (count > 0) ? this._NewNotifications_gicon : this._Notifications_gicon;
+            }
+	    } else {
+            if (!this._settings.get_boolean('show-banners')) {
+                this._icon.gicon = Gio.icon_new_for_string(NotificationsDisabled);
+                this._icon.show();
+            } else {
+                if (count > 0) {
+                    this._icon.icon_name = 'media-record-symbolic';
+                    this._icon.show();
+                } else {
+                this.actor.hide();
+                }
+            }
 	    }
-	    else {
-               this.actor.hide();
-	    }
-	}
-
         this.actor = this._icon;
     }
 
