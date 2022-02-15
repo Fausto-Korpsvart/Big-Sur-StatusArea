@@ -26,7 +26,6 @@ const _ = Gettext.gettext;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
-// const Lang = imports.lang;
 
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const MenuItems = Extension.imports.menuItems;
@@ -62,7 +61,7 @@ var DialogWindow = GObject.registerClass({
 class DialogWindow extends Gtk.Dialog {
 
     _init (title, parent) {
-        this.parent({
+        super._init({
             title: title,
             transient_for: parent.get_toplevel(),
             use_header_bar: true,
@@ -106,10 +105,8 @@ class NotebookPage extends Gtk.Box {
 
 var FrameBox = GObject.registerClass({
     GTypeName: "FrameBox",
-   
 },
 class FrameBox extends Gtk.Frame {
-
     _init (label) {
         this._listBox = new Gtk.ListBox();
         this._listBox.set_selection_mode(Gtk.SelectionMode.NONE);
@@ -375,6 +372,7 @@ class IndicatorsPage extends NotebookPage {
     }
 
     getSpacingScale () {
+            this.settings.set_int("spacing", this.spacingScale.get_value());
     }
 
     buildList () {
@@ -405,13 +403,17 @@ class IndicatorsPage extends NotebookPage {
             positionCombo.append_text(_("Left"));
             positionCombo.append_text(_("Center"));
             positionCombo.set_active(item["position"]);
-            positionCombo.connect("changed", this.enableCenter.bind(this, indexItem));
+            positionCombo.connect("changed", () => {
+                 this.enableCenter(positionCombo, indexItem);
+            });
 
             let statusSwitch = new Gtk.Switch({
                 active: (item["enable"] == "1"),
                 halign: Gtk.Align.END
             });
-            statusSwitch.connect("notify", this.changeEnable.bind(this, indexItem));
+            statusSwitch.connect("notify", () => {
+                this.changeEnable(statusSwitch, null, indexItem);
+            });
 
 
             let buttonBox = new Gtk.Box({
@@ -425,14 +427,18 @@ class IndicatorsPage extends NotebookPage {
             buttonUp.set_icon_name("go-up-symbolic");
 
             if (indexItem > 0) {
-                buttonUp.connect("clicked", this.changeOrder.bind(this, indexItem, -1));
+                buttonUp.connect("clicked", () => {
+                      this.changeOrder(null, indexItem, -1);
+                });
             }
 
             let buttonDown = new Gtk.Button();
             buttonDown.set_icon_name("go-down-symbolic");
 
             if (indexItem < items.length - 1) {
-                buttonDown.connect("clicked", this.changeOrder.bind(this, indexItem, 1));
+                buttonDown.connect("clicked", () => {
+                      this.changeOrder(null, indexItem, 1);
+                });
             }
 
             buttonBox.append(buttonUp);
@@ -483,10 +489,8 @@ class IndicatorsPage extends NotebookPage {
 
     changeEnable (object, p, index) {
         let items = this.menuItems.getItems();
-	if (items.length == 0) return;
         let item = items[index];
-        if (!item) return;
-        
+
         if (_(item["label"]) == _("Calendar") &&
            !this.settings.get_boolean("separate-date-and-notification")) {
             object.set_active(false);
