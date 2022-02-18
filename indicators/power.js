@@ -77,7 +77,7 @@ class PowerIndicator extends CustomButton {
         } else {
             this._power._indicator.show();
             this._percentageLabel.visible = this._power._desktopSettings.get_boolean("show-battery-percentage");
-            this._percentageLabel.clutter_text.set_markup('<span size="smaller">' + this._power._proxy.Percentage + " %</span>");
+            this._percentageLabel.clutter_text.set_markup('<span size="smaller">' + this._power._proxy.Percentage.toFixed(2) + " %</span>");
             this._separator.actor.show();
             this._label.show();
             this._settings.actor.show();
