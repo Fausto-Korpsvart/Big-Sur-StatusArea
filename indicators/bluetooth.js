@@ -73,11 +73,21 @@ class BluetoothIndicator extends CustomButton {
         this._bluetooth._sync();
 
         this._client = new GnomeBluetooth.Client();
-        this._model = this._client.get_model();
-        this._model.connect('row-changed', () => this._sync());
-        this._model.connect('row-deleted', () => this._sync());
-        this._model.connect('row-inserted', () => this._sync());
+        // this._model = this._client.get_model();
+        this._deviceNotifyConnected = new Set();
 
+        const deviceStore = this._client.get_devices();
+        for (let i = 0; i < deviceStore.get_n_items(); i++)
+            this._connectDeviceNotify(deviceStore.get_item(i));
+
+        this._client.connect('device-removed', (c, path) => {
+            this._deviceNotifyConnected.delete(path);
+            this._queueSync.bind(this);
+        });
+        this._client.connect('device-added', (c, device) => {
+            this._connectDeviceNotify(device);
+            this._sync();
+        });
 
         this.menu.connect("open-state-changed", (menu, isOpen) => {
             if (isOpen) {
@@ -94,25 +104,25 @@ class BluetoothIndicator extends CustomButton {
         let sensitive = !Main.sessionMode.isLocked && !Main.sessionMode.isGreeter;
         this.menu.setSensitive(sensitive);
 
-        let adapter = this._bluetooth._getDefaultAdapter();
-	let devices = this._bluetooth._getDeviceInfos(adapter);
+	let devices = this._bluetooth._getDeviceInfos();
         let connectedDevices = devices.filter(dev => dev.connected);
         let nConnectedDevices = connectedDevices.length;
         let nDevices = devices.length;
+        const adapterPowered = this._client.default_adapter_powered;
 
         if (nConnectedDevices > 0) {
             // Paired
             this._indicator.gicon = this._bluetooth_paired_gicon;
             this._bluetooth._item.icon.gicon = this._bluetooth_paired_gicon;
-        } else if (adapter === null) {
+        } else if (adapterPowered) {
+            // On
+            this._indicator.icon_name = 'bluetooth-active-symbolic';
+            this._bluetooth._item.icon.icon_name = 'bluetooth-active-symbolic';
+        } else {
             // Off
             this._bluetooth._item.actor.show();
 	        this._indicator.icon_name = 'bluetooth-disabled-symbolic';	
             this._bluetooth._item.icon.icon_name = 'bluetooth-disabled-symbolic';	
-        } else {
-            // On
-            this._indicator.icon_name = 'bluetooth-active-symbolic';
-            this._bluetooth._item.icon.icon_name = 'bluetooth-active-symbolic';
         }
 
     }
