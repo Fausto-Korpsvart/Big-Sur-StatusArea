@@ -81,15 +81,15 @@ class CalendarIndicator extends CustomButton {
         });
         vbox.add_actor(hbox_date);
         
-        let _dayLabel = new St.Label({ style_class: 'day-label',
+        this.dayLabel = new St.Label({ style_class: 'day-label',
                                         x_align: Clutter.ActorAlign.START,
                                         });
-        hbox_date.add_actor(_dayLabel);
-        _dayLabel.set_text(now.toLocaleFormat('%A'));
-        let _dateLabel = new St.Label({ style_class: 'date-label' });
-        hbox_date.add_actor(_dateLabel);
+        hbox_date.add_actor(this.dayLabel);
+        this.dayLabel.set_text(now.toLocaleFormat('%A'));
+        this.dateLabel = new St.Label({ style_class: 'date-label' });
+        hbox_date.add_actor(this.dateLabel);
         let dateFormat = Shell.util_translate_time_string(N_("%B %-d %Y"));
-        _dateLabel.set_text(now.toLocaleFormat(dateFormat));
+        this.dateLabel.set_text(now.toLocaleFormat(dateFormat));
 
         this._displaysSection = new St.ScrollView({
             style_class: "datemenu-displays-section vfade",
@@ -119,6 +119,9 @@ class CalendarIndicator extends CustomButton {
                 let now = new Date();
                 this._calendar.setDate(now);
                 this._eventsSection.setDate(now);
+                this.dayLabel.set_text(now.toLocaleFormat('%A'));
+                let dateFormat = Shell.util_translate_time_string(N_("%B %-d %Y"));
+                this.dateLabel.set_text(now.toLocaleFormat(dateFormat));
                 //this._date.setDate(now);
             }
         });
