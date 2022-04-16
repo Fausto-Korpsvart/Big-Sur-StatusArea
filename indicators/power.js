@@ -76,7 +76,7 @@ class PowerIndicator extends CustomButton {
             
         } else {
             this._power._indicator.show();
-	    if (this._power._proxy.State == UPowerGlib.DeviceState.FULLY_CHARGING)
+	    if (this._power._proxy.State == UPowerGlib.DeviceState.CHARGING)
                this._percentageLabel.visible = false;
 	    else
                this._percentageLabel.visible = this._power._desktopSettings.get_boolean("show-battery-percentage");
