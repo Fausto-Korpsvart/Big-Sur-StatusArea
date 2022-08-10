@@ -41,7 +41,11 @@ class CustomButton extends PanelMenu.Button {
     }
 
     _openApp (app) {
-        Shell.AppSystem.get_default().lookup_app(app).activate();
+        let app = Shell.AppSystem.get_default().lookup_app(app);
+        if app == null)
+           return false;
+        app.activate();
+        return true;
     }
 
     set_spacing (spacing) {
