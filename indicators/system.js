@@ -106,7 +106,11 @@ class UserIndicator extends CustomButton {
         settings.actor.add_actor(settings_icon);
         settings.actor.add_actor(settings_label);
 
-        settings.connect("activate", () => this._openApp("gnome-control-center.desktop"));
+        settings.connect("activate", () => {
+            let ret = this._openApp("gnome-control-center.desktop");
+            if (ret == false)
+               ret = this._openApp("org.gnome.Settings.desktop");
+        });
         this.menu.addMenuItem(settings);
 
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem()); // SEPARATOR
