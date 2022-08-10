@@ -40,9 +40,9 @@ class CustomButton extends PanelMenu.Button {
         this.add_child(this.box);
     }
 
-    _openApp (app) {
-        let app = Shell.AppSystem.get_default().lookup_app(app);
-        if app == null)
+    _openApp (desktop) {
+        let app = Shell.AppSystem.get_default().lookup_app(desktop);
+        if (app == null)
            return false;
         app.activate();
         return true;
