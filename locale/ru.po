@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-15 18:04-0800\n"
-"PO-Revision-Date: 2022-02-06 21:01+0300\n"
+"PO-Revision-Date: 2022-05-04 23:15+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -20,7 +20,7 @@ msgstr "Настройки"
 
 #: ../prefs.js:193
 msgid "User/System Indicator"
-msgstr "Пользовательский и системный индикатор"
+msgstr "Индикатор пользователя"
 
 #: ../prefs.js:197
 msgid "Show an icon instead of name"
@@ -68,7 +68,7 @@ msgstr "По центру"
 
 #: ../prefs.js:404
 msgid "Top to bottom -> Left to right"
-msgstr "Сверху вниз -> Слева направо"
+msgstr "Для перемещения индикатора необходимо изменить его место в списке"
 
 #: ../prefs.js:409
 msgid "Reset Indicators"
@@ -211,7 +211,7 @@ msgid "Power"
 msgstr "Питание"
 
 msgid "Notification"
-msgstr "Уведомление"
+msgstr "Уведомления"
 
 msgid "User"
 msgstr "Пользователь"

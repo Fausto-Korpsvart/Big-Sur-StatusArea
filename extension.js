@@ -58,8 +58,8 @@ const CENTER_BOX = Main.panel._centerBox;
 const RIGHT_BOX = Main.panel._rightBox;
 
 function enable() {
-    Main.panel.statusArea.aggregateMenu.container.hide();
-    Main.panel.statusArea.dateMenu.container.hide();
+    Main.panel.statusArea.aggregateMenu.actor.hide();
+    Main.panel.statusArea.dateMenu.actor.hide();
     Main.panel._centerBox.remove_child(Main.panel.statusArea.dateMenu.container);
 
     network = new NetworkIndicator();

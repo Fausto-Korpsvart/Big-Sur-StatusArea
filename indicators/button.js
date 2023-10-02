@@ -40,8 +40,12 @@ class CustomButton extends PanelMenu.Button {
         this.add_child(this.box);
     }
 
-    _openApp (app) {
-        Shell.AppSystem.get_default().lookup_app(app).activate();
+    _openApp (desktop) {
+        let app = Shell.AppSystem.get_default().lookup_app(desktop);
+        if (app == null)
+           return false;
+        app.activate();
+        return true;
     }
 
     set_spacing (spacing) {
