@@ -17,15 +17,20 @@
  */
 
 const { St, Shell } = imports.gi;
-const Lang = imports.lang;
+const GObject = imports.gi.GObject;
 const PanelMenu = imports.ui.panelMenu;
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
+const Convenience = Me.imports.convenience;
 
-var CustomButton = new Lang.Class({
-    Name: "Button",
-    Extends: PanelMenu.Button,
+var CustomButton = GObject.registerClass({
+    GTypeName: 'CustomButton',
+},
+class CustomButton extends PanelMenu.Button {
 
-    _init: function (name) {
-        this.parent(0.5, name);
+    _init (name) {
+        super._init(0.5, name);
+        this.settings = Convenience.getSettings();
         this.name = name;
         this._center = false;
         this.box = new St.BoxLayout({
@@ -33,22 +38,30 @@ var CustomButton = new Lang.Class({
             style_class: "panel-status-menu-box"
         });;
         this.add_child(this.box);
-    },
-    _openApp: function (app) {
+    }
+
+    _openApp (app) {
         Shell.AppSystem.get_default().lookup_app(app).activate();
-    },
-    set_spacing: function (spacing) {
+    }
+
+    set_spacing (spacing) {
         this._default_spacing = spacing;
         this.update_spacing(spacing);
-    },
-    update_spacing: function (spacing) {
-        let style = '-natural-hpadding: %dpx'.format(spacing);
-        if (spacing < 6) {
-            style += '; -minimum-hpadding: %dpx'.format(spacing);
-        }
-        this.set_style(style);
-    },
-    calculate_spacing: function () {
+    }
+
+    update_spacing (spacing) {
+        if (this.settings.get_boolean("activate-spacing")) {
+            let style = '-natural-hpadding: %dpx'.format(spacing);
+            if (spacing < 6) {
+                style += '; -minimum-hpadding: %dpx'.format(spacing);
+            }
+            this.set_style(style);
+	}
+	else
+            this.set_style("");
+    }
+
+    calculate_spacing () {
         let style = this.get_style();
         if (style) {
             let start = style.indexOf("-natural-hpadding: ");
@@ -57,8 +70,9 @@ var CustomButton = new Lang.Class({
             return val;
         }
         return NaN
-    },
-    destroy: function () {
-        this.parent();
+    }
+
+    destroy () {
+        super.destroy()
     }
 });

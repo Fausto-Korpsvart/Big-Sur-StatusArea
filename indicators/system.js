@@ -19,8 +19,8 @@
 const { AccountsService, Clutter, GLib, St, Gio } = imports.gi;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
-const Lang = imports.lang;
-const Gettext = imports.gettext.domain("panel-indicators");
+const GObject = imports.gi.GObject;
+const Gettext = imports.gettext.domain("bigSur-StatusArea");
 const _ = Gettext.gettext;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
@@ -28,13 +28,14 @@ const CustomButton = Extension.imports.indicators.button.CustomButton;
 
 var PANEL_ICON_SIZE = 16;
 
-var UserIndicator = new Lang.Class({
-    Name: "UserIndicator",
-    Extends: CustomButton,
+var UserIndicator = GObject.registerClass({
+    GTypeName: "UserIndicator",
+},
+class UserIndicator extends CustomButton {
 
-    _init: function () {
-        this.parent("UserIndicator");
-        this.menu.box.set_width(270);
+    _init () {
+        super._init("UserIndicator");
+        //this.menu.box.set_width(270);
         this.menu.actor.add_style_class_name("aggregate-menu");
         this._system = Main.panel.statusArea.aggregateMenu._system;
         this._screencast = Main.panel.statusArea.aggregateMenu._screencast;
@@ -47,22 +48,23 @@ var UserIndicator = new Lang.Class({
             y_align: Clutter.ActorAlign.CENTER,
             style_class: "panel-status-menu-box"
         });
+	    
+        this._powerIcon = new St.Icon({ 
+	icon_name: 'avatar-default-symbolic', 
+	style_class: "system-status-icon"});
 
-        this._power_gicon = Gio.icon_new_for_string(`${Me.path}/icons/system-shutdown-symbolic.svg`);
-        this._powerIcon = new St.Icon({ gicon: this._power_gicon });
-        this._powerIcon.icon_size = PANEL_ICON_SIZE;
-
-        // this.box.add_child(this._screencast.indicators);
-        this.box.add_child(this._screencast);
+        if (this._screencast)
+             this.box.add_child(this._screencast);
         this.box.add_child(this._powerIcon);
         this.box.add_child(this._nameLabel);
 
         this._createSubMenu();
 
         Main.panel.statusArea.aggregateMenu.menu.box.remove_actor(this._system.menu.actor);
+        //IS THIS NEEDED?
         // this.menu.addMenuItem(this._system.menu);
-    },
-    _createSubMenu: function () {
+    }
+    _createSubMenu () {
 
         this._switchUserSubMenu = new PopupMenu.PopupSubMenuMenuItem('', true);
         this._switchUserSubMenu.icon.icon_name = 'avatar-default-symbolic';
@@ -126,6 +128,10 @@ var UserIndicator = new Lang.Class({
 
         lock.connect("activate", () => this._system._systemActions.activateLockScreen());
         this.menu.addMenuItem(lock);
+        //IS THIS NEEDED?
+        // if (!this._system._lockScreenAction.visible) {
+        //     lock.actor.hide();
+        // }
 
         //////////////
         let switchuser = new PopupMenu.PopupBaseMenuItem();
@@ -135,8 +141,8 @@ var UserIndicator = new Lang.Class({
             y_align: Clutter.ActorAlign.CENTER
         });
         
-        this._switchuser_gicon = Gio.icon_new_for_string(`${Me.path}/icons/switch-user-symbolic.svg`);
-        let switchuser_icon = new St.Icon({ gicon: this._switchuser_gicon });
+        this._switchuser_gicon = 'system-switch-user-symbolic';
+        let switchuser_icon = new St.Icon({ icon_name: this._switchuser_gicon });
         switchuser_icon.icon_size = PANEL_ICON_SIZE;
 
         switchuser.actor.add_actor(switchuser_icon);
@@ -158,8 +164,8 @@ var UserIndicator = new Lang.Class({
             y_align: Clutter.ActorAlign.CENTER
         });
 
-        this._orientation_icon_gicon = Gio.icon_new_for_string(`${Me.path}/icons/orientation-lock-symbolic.svg`);
-        let orientation_icon = new St.Icon({ gicon: this._orientation_icon_gicon });
+        this._orientation_icon_icon = 'rotation-locked-symbolic';;
+        let orientation_icon = new St.Icon({ icon_name: this._orientation_icon_icon });
         orientation_icon.icon_size = PANEL_ICON_SIZE;
 
         orientation.actor.add_actor(orientation_icon);
@@ -167,7 +173,13 @@ var UserIndicator = new Lang.Class({
 
         orientation.connect("activate", () => this._system._systemActions.activateLockOrientation());
         this.menu.addMenuItem(orientation);
+        //IS THIS NEEDED?
+        // if (!this._system._orientationLockAction.visible) {
+        //     orientation.actor.hide();
+        // }
 
+        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem()); // SEPARATOR	    
+	    
         ///////////////
         let suspend = new PopupMenu.PopupBaseMenuItem();
 
@@ -186,6 +198,33 @@ var UserIndicator = new Lang.Class({
 
         suspend.connect("activate", () => this._system._systemActions.activateSuspend());
         this.menu.addMenuItem(suspend);
+        //IS THIS NEEDED?
+        // if (!this._system._suspendAction.visible) {
+        //     suspend.actor.hide();
+        // }
+
+        let restart = new PopupMenu.PopupBaseMenuItem();
+
+        let restart_label = new St.Label({
+            text: _("Restart"),
+            y_align: Clutter.ActorAlign.CENTER
+        });
+
+	let restart_icon = new St.Icon({
+            icon_name: "system-reboot-symbolic",
+            style_class: "system-status-icon",
+            icon_size: PANEL_ICON_SIZE
+        });
+
+        restart.actor.add_actor(restart_icon);
+        restart.actor.add_actor(restart_label);
+
+        restart.connect("activate", () => this._system._systemActions.activateRestart());
+        this.menu.addMenuItem(restart);
+        //IS THIS NEEDED?
+        // if (!this._system._restartAction.visible) {
+        //     restart.actor.hide();
+        // }
 
         let power = new PopupMenu.PopupBaseMenuItem();
 
@@ -193,8 +232,12 @@ var UserIndicator = new Lang.Class({
             text: _("Power Off"),
             y_align: Clutter.ActorAlign.CENTER
         });
-        
-        let power_icon = new St.Icon({ gicon: this._power_gicon });
+
+	let power_icon = new St.Icon({
+            icon_name: "system-shutdown-symbolic",
+            style_class: "system-status-icon",
+            icon_size: PANEL_ICON_SIZE
+        });
         power_icon.icon_size = PANEL_ICON_SIZE;
 
         power.actor.add_actor(power_icon);
@@ -202,14 +245,20 @@ var UserIndicator = new Lang.Class({
 
         power.connect("activate", () => this._system._systemActions.activatePowerOff());
         this.menu.addMenuItem(power);
-    },
-    changeLabel: function (label) {
+        //IS THIS NEEDED?
+        // if (!this._system._powerOffAction.visible) {
+        //     power.actor.hide();
+        // }
+    }
+
+    changeLabel (label) {
         if (label == "") {
             label = GLib.get_real_name();
         }
         this._nameLabel.set_text(label);
-    },
-    changeIcon: function (enabled) {
+    }
+
+    changeIcon (enabled) {
         if (enabled) {
             this._powerIcon.show();
             this._nameLabel.hide();
@@ -217,11 +266,12 @@ var UserIndicator = new Lang.Class({
             this._powerIcon.hide();
             this._nameLabel.show();
         }
-    },
-    destroy: function () {
+    }
+
+    destroy () {
         this.menu.box.remove_actor(this._system.menu.actor);
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._system.menu.actor);
         
-        this.parent();
+        super.destroy()
     }
 });

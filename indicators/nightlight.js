@@ -17,31 +17,32 @@
  */
 
 const { St, Gio } = imports.gi;
-const Lang = imports.lang;
+const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const Slider = imports.ui.slider;
 const PopupMenu = imports.ui.popupMenu;
-const Gettext = imports.gettext.domain("panel-indicators");
+const Gettext = imports.gettext.domain("bigSur-StatusArea");
 const _ = Gettext.gettext;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 
-var NightLightIndicator = new Lang.Class({
-    Name: "NightLightIndicator",
-    Extends: CustomButton,
+var NightLightIndicator = GObject.registerClass({
+    GTypeName: "NightLightIndicator",
+},
+class NightLightIndicator extends CustomButton {
 
-    _init: function () {
+    _init () {
+        super._init("NightLightIndicator");
         
         this._min = 4700;
         this._max = 1700;
 
-        this.parent("NightLightIndicator");
-        this.menu.box.set_width(250);
+        //this.menu.box.set_width(250);
         this.menu.actor.add_style_class_name("aggregate-menu");
 
         this._nightLight = Main.panel.statusArea.aggregateMenu._nightLight;
-        this._nightLight.indicators.remove_actor(this._nightLight._indicator);
-        this._nightLight.indicators.show();
+        this._nightLight.remove_actor(this._nightLight._indicator);
+        this._nightLight.show();
         this._nightLight._sync = function () {};
         
         this.box.add_child(this._nightLight._indicator);
@@ -74,10 +75,8 @@ var NightLightIndicator = new Lang.Class({
                 this._updateView();
             }
         });
-        
-        sliderItem.add(this._slider, {
-            expand: true
-        });
+
+        sliderItem.actor.add(this._slider);
 
         this.menu.box.add_child(this._label);
         this.menu.addMenuItem(sliderItem);
@@ -103,41 +102,46 @@ var NightLightIndicator = new Lang.Class({
         
         this._sync();
         this._updateView();
-    },
-    _sliderChanged: function (slider, value) {
+    }
+
+    _sliderChanged (slider, value) {
         const temperature = parseInt(this._slider.value * (this._max - this._min)) + this._min;
         this._settings.set_uint('night-light-temperature', temperature);
-    },
-    _updateView: function () {
+    }
+
+    _updateView () {
         // Update temperature view
         const temperature = this._settings.get_uint('night-light-temperature');
         const value = (temperature - this._min) / (this._max - this._min);
         this._slider.value = value;
-    },    
-    _change: function () {
+    }
+    
+    _change () {
         this._nightLight._proxy.DisabledUntilTomorrow = !this._nightLight._proxy.DisabledUntilTomorrow;
         this._sync();
-    },
-    _toggleFeature: function () {
+    }
+
+    _toggleFeature () {
         let enabledStatus = this._settings.get_boolean("night-light-enabled");
         this._settings.set_boolean("night-light-enabled", !enabledStatus);
         this._sync();
-    },
-    _sync: function () {
-        let featureEnabled = this._settings.get_boolean("night-light-enabled");
+    }
+
+    _sync () {
+	let featureEnabled = this._settings.get_boolean("night-light-enabled");
         this.turnItem.label.set_text(featureEnabled ? _("Turn Off") : _("Turn On"));
-        let visible = this._nightLight._proxy.NightLightActive;
         let disabled = this._nightLight._proxy.DisabledUntilTomorrow || !this._nightLight._proxy.NightLightActive;
         this._label.set_text(disabled ? _("Night Light Disabled") : _("Night Light On"));
         this._disableItem.label.text = disabled ? _("Resume") : _("Disable Until Tomorrow");
         this._disableItem.actor.visible = featureEnabled;
-        this.visible = visible;
-    },
-    destroy: function () {
+        this.visible = true;
+    }
+
+    destroy () {
         this._nightLight._proxy.disconnect(this._properties_changed);
         this.box.remove_child(this._nightLight._indicator);
-        this._nightLight.indicators.hide();
-        this._nightLight.indicators.add_actor(this._nightLight._indicator);
-        this.parent();
+        this._nightLight.hide();
+        this._nightLight.add_actor(this._nightLight._indicator);
+        super.destroy()
     }
 });

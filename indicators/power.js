@@ -17,41 +17,35 @@
  */
 
 const { St, UPowerGlib, Clutter } = imports.gi;
-const Lang = imports.lang;
+const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
-const Gettext = imports.gettext.domain("panel-indicators");
+const Gettext = imports.gettext.domain("bigSur-StatusArea");
 const _ = Gettext.gettext;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 
-var PowerIndicator = new Lang.Class({
+var PowerIndicator = GObject.registerClass({
     Name: "PowerIndicator",
-    Extends: CustomButton,
+},
+class PowerIndicator extends CustomButton {
 
-    _init: function () {
-        this.parent("PowerIndicator");
+    _init () {
+        super._init("PowerIndicator");
         this.menu.actor.add_style_class_name("aggregate-menu");
         this._power = Main.panel.statusArea.aggregateMenu._power;
-        this._power.indicators.remove_actor(this._power._indicator);
+        this._power.remove_actor(this._power._indicator);
     
-        this._brightness = Main.panel.statusArea.aggregateMenu._brightness;
-        this._brightnessIcon = new St.Icon({
-            icon_name: "display-brightness-symbolic",
-            style_class: "system-status-icon"
-        });
         this._percentageLabel = new St.Label({
             text: "",
             y_expand: true,
             y_align: Clutter.ActorAlign.CENTER,
             visible: false
         });
-        this.box.add_child(this._brightnessIcon);
         this.box.add_child(this._power._indicator);
         this.box.add_child(this._percentageLabel);
-        Main.panel.statusArea.aggregateMenu.menu.box.remove_actor(this._brightness.menu.actor);
-        this.menu.box.add_actor(this._brightness.menu.actor);
 
+        this._power.remove_actor(this._power._percentageLabel);
         Main.panel.statusArea.aggregateMenu.menu.box.remove_actor(this._power.menu.actor);
 
         this._separator = new PopupMenu.PopupSeparatorMenuItem();
@@ -67,12 +61,11 @@ var PowerIndicator = new Lang.Class({
         this._properties_changed = this._power._proxy.connect("g-properties-changed", () => this._sync());
         this._show_battery_signal = this._power._desktopSettings.connect("changed::show-battery-percentage", () => this._sync());
         this._sync();
-    },
-    _sync: function () {
+    }
+
+    _sync () {
         let powertype = this._power._proxy.IsPresent;
         if (!powertype) {
-            this._brightnessIcon.show();
-            this._brightness.menu.actor.show();
             this._power._indicator.hide();
             this._percentageLabel.hide();
             this._separator.actor.hide();
@@ -82,11 +75,12 @@ var PowerIndicator = new Lang.Class({
             this.hide();
             
         } else {
-            this._brightnessIcon.hide();
             this._power._indicator.show();
-            this._brightness.menu.actor.show();
-            this._percentageLabel.visible = this._power._desktopSettings.get_boolean("show-battery-percentage");
-            this._percentageLabel.clutter_text.set_markup('<span size="smaller">' + this._power._proxy.Percentage + " %</span>");
+	    if (this._power._proxy.State == UPowerGlib.DeviceState.CHARGING)
+               this._percentageLabel.visible = false;
+	    else
+               this._percentageLabel.visible = this._power._desktopSettings.get_boolean("show-battery-percentage");
+            this._percentageLabel.clutter_text.set_markup('<span size="smaller">' + Math.round(this._power._proxy.Percentage) + " %</span>");
             this._separator.actor.show();
             this._label.show();
             this._settings.actor.show();
@@ -104,33 +98,35 @@ var PowerIndicator = new Lang.Class({
 
         }
         this._label.set_text(this._power._getStatus());
-    },
-    showPercentageLabel: function (status) {
+    }
+
+    showPercentageLabel (status) {
         this._power._desktopSettings.set_boolean(status);
         this._sync();
-    },
-    setHideOnFull: function (status) {
+    }
+
+    setHideOnFull (status) {
         this._hideOnFull = status;
         this._sync();
-    },
-    setHideOnPercent: function (status, percent, element) {
+    }
+
+    setHideOnPercent (status, percent, element) {
         this._actor = (element == 0) ? this.actor : this._percentageLabel;
         this._hideOnPercent = status;
         this._hideWhenPercent = percent;
         this._sync();
-    },
-    destroy: function () {
+    }
+
+    destroy () {
         this._power._proxy.disconnect(this._properties_changed);
         this._power._desktopSettings.disconnect(this._show_battery_signal);
 
         this.box.remove_child(this._power._indicator);
-        this.menu.box.remove_actor(this._brightness.menu.actor);
         
-        this._power.indicators.add_actor(this._power._indicator);
-        Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._brightness.menu.actor);
+        this._power.add_actor(this._power._indicator);
 
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._power.menu.actor);
         
-        this.parent();
+        super.destroy()
     }
 });

@@ -16,59 +16,70 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const { St, Shell, Clutter } = imports.gi;
-const Lang = imports.lang;
+const { St, Shell, Clutter, Gio } = imports.gi;
+const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
-const Gettext = imports.gettext.domain("panel-indicators");
+const Gettext = imports.gettext.domain("bigSur-StatusArea");
 const _ = Gettext.gettext;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 const Convenience = Extension.imports.convenience;
 
-var VolumeIndicator = new Lang.Class({
-    Name: "VolumeIndicator",
-    Extends: CustomButton,
+var VolumeIndicator = GObject.registerClass({
+    GTypeName: "VolumeIndicator",
+},
+class VolumeIndicator extends CustomButton {
 
-    _init: function () {
-        this.parent("VolumeIndicator");
+    _init () {
+        super._init("VolumeIndicator");
         this._settings = Convenience.getSettings();
         this.menu.actor.add_style_class_name("aggregate-menu");
         this._volume = Main.panel.statusArea.aggregateMenu._volume;
-        this._volume.indicators.remove_actor(this._volume._primaryIndicator);
+        this._volume.remove_actor(this._volume._primaryIndicator);
         this.box.add_child(this._volume._primaryIndicator);
         Main.panel.statusArea.aggregateMenu.menu.box.remove_actor(this._volume.menu.actor);
         this.menu.box.add_actor(this._volume.menu.actor);
-
-        this._mediaSection = Main.panel.statusArea.dateMenu._messageList._mediaSection;
-        Main.panel.statusArea.dateMenu._messageList._sectionList.remove_actor(this._mediaSection);
-
-        this._mediaSection.actor.set_style('max-width:400px;padding-right:6px;padding-bottom:10px;');
-
-        this.menu.box.add_actor(this._mediaSection.actor);
-
-        this.menu.connect("open-state-changed", (menu, isOpen) => {
-            if (isOpen) {
-                this._mediaSection.show();
-            }
-        });
-
-        this.connect("scroll-event", (actor, event) => this._volume._onScrollEvent(actor, event));
+        this.connect("scroll-event", (actor, event) => {
+             this.onScroll(event);
+	});
+        //this.connect("scroll-event", (actor, event) => this._volume._volumeMenu.scrollOutput(event));
 
         let settings = new PopupMenu.PopupMenuItem(_("Volume Settings"));
         settings.connect("activate", () => this._openApp("gnome-sound-panel.desktop"));
+        this.menu.connect('open-state-changed', (menu, isPoppedUp) => {
+            if (isPoppedUp) {
+                let children = this._volume._volumeMenu._getMenuItems();
+                for (let i = 0; i < children.length; i++) {
+                    children[i].show();
+                }
+            }
+        }, this._volume);
         this.menu.addMenuItem(settings);
-        this.menu.box.connect("scroll-event", (actor, event) => this._volume._onScrollEvent(actor, event));
-    },
-    destroy: function () {
-        this._mediaSection.actor.disconnect(this._mediaVisible);
+        // this.menu.box.connect("scroll-event", (actor, event) => this.onScroll(event));
+        //this.menu.box.connect("scroll-event", (actor, event) => this._volume._volumeMenu.scrollOutput(event));
+    }
+
+    destroy () {
+        //this._mediaSection.disconnect(this._mediaVisible);
         this.box.remove_child(this._volume._primaryIndicator);
         this.menu.box.remove_actor(this._volume.menu.actor);
-        this.menu.box.remove_actor(this._mediaSection.actor);
-        this._volume.indicators.add_actor(this._volume._primaryIndicator);
-        this._mediaSection.actor.remove_style_class_name("music-box");
+        //this.menu.box.remove_actor(this._mediaSection);
+        this._volume.add_actor(this._volume._primaryIndicator);
+        //this._mediaSection.remove_style_class_name("music-box");
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._volume.menu.actor);
-        Main.panel.statusArea.dateMenu._messageList._addSection(this._mediaSection);
-        this.parent();
+        //Main.panel.statusArea.dateMenu._messageList._addSection(this._mediaSection);
+        super.destroy()
+    }
+
+    onScroll(event) {
+	let result = this._volume._volumeMenu.scroll(event);
+        if (result == Clutter.EVENT_PROPAGATE || this._volume.menu.actor.mapped)
+             return result;
+
+        let gicon = new Gio.ThemedIcon({ name: this._volume._volumeMenu.getOutputIcon() });
+        let level = this._volume._volumeMenu.getLevel();
+        let maxLevel = this._volume._volumeMenu.getMaxLevel();
+        Main.osdWindowManager.show(-1, gicon, null, level, maxLevel);
     }
 });

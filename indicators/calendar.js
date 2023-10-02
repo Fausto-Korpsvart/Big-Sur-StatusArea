@@ -16,95 +16,113 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const { St, Gtk, GLib, Clutter, Gio } = imports.gi;
-const Lang = imports.lang;
+const { St, Gtk, GLib, Clutter, Gio, Shell } = imports.gi;
+const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
-const Gettext = imports.gettext.domain("panel-indicators");
+const Gettext = imports.gettext.domain("bigSur-StatusArea");
 const _ = Gettext.gettext;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const CustomButton = Extension.imports.indicators.button.CustomButton;
 
-var CalendarIndicator = new Lang.Class({
-    Name: "CalendarIndicator",
-    Extends: CustomButton,
-    _init: function () {
-        this.parent("CalendarIndicator");
+var CalendarIndicator = GObject.registerClass({
+    GTypeName: "CalendarIndicator",
+},
+class CalendarIndicator extends CustomButton {
+    _init () {
+        super._init("CalendarIndicator");
 
         this._clock = Main.panel.statusArea.dateMenu._clock;
         this._calendar = Main.panel.statusArea.dateMenu._calendar;
         this._date = Main.panel.statusArea.dateMenu._date;
-        this._eventsSection = new imports.ui.calendar.EventsSection();
+        this._eventsSection = new imports.ui.dateMenu.EventsSection();
         this._clocksSection = Main.panel.statusArea.dateMenu._clocksItem;
         this._weatherSection = Main.panel.statusArea.dateMenu._weatherItem;
         this._clockIndicator = Main.panel.statusArea.dateMenu._clockDisplay;
 
         this._clockIndicatorFormat = new St.Label({
+            style_class: "clock-display",
             visible: false,
             y_align: Clutter.ActorAlign.CENTER
         });
 
         this._indicatorParent = this._clockIndicator.get_parent();
-        this._calendarParent = this._calendar.actor.get_parent();
-        this._sectionParent = this._clocksSection.actor.get_parent();
+        this._calendarParent = this._calendar.get_parent();
+        this._sectionParent = this._clocksSection.get_parent();
 
         this._indicatorParent.remove_actor(this._clockIndicator);
-        this._calendarParent.remove_child(this._calendar.actor);
-        this._calendarParent.remove_child(this._date.actor);
-        this._sectionParent.remove_child(this._clocksSection.actor);
-        this._sectionParent.remove_child(this._weatherSection.actor);
+        this._indicatorParent.remove_child(this._date);
+        this._calendarParent.remove_child(this._calendar);
+        this._sectionParent.remove_child(this._clocksSection);
+        this._sectionParent.remove_child(this._weatherSection);
 
         this.box.add_actor(this._clockIndicator);
         this.box.add_actor(this._clockIndicatorFormat);
 
         let boxLayout;
         let vbox;
+        let hbox;
 
         hbox = new St.BoxLayout({ name: 'calendarArea' });
 
-        boxLayout = new imports.ui.dateMenu.CalendarColumnLayout(this._calendar.actor);
-        vbox = new St.Widget({
-            style_class: "datemenu-calendar-column",
-            layout_manager: boxLayout
-        });
+        // Fill up the second column
+        boxLayout = new imports.ui.dateMenu.CalendarColumnLayout([this._calendar, this._date]);
+        vbox = new St.Widget({ style_class: 'datemenu-calendar-column',
+                               layout_manager: boxLayout });
         boxLayout.hookup_style(vbox);
+        hbox.add(vbox);
 
-        let  displaySection = new St.ScrollView({
-            style_class: "datemenu-displays-section vfade",
+        let now = new Date();
+        let hbox_date = new St.BoxLayout({
+			vertical: true,style_class: 'datemenu-today-button',
             x_expand: true,
-            x_fill: true,
-            overlay_scrollbars: true
+            can_focus: true,
+            reactive: false,
+        });
+        vbox.add_actor(hbox_date);
+        
+        this.dayLabel = new St.Label({ style_class: 'day-label',
+                                        x_align: Clutter.ActorAlign.START,
+                                        });
+        hbox_date.add_actor(this.dayLabel);
+        this.dayLabel.set_text(now.toLocaleFormat('%A'));
+        this.dateLabel = new St.Label({ style_class: 'date-label' });
+        hbox_date.add_actor(this.dateLabel);
+        let dateFormat = Shell.util_translate_time_string(N_("%B %-d %Y"));
+        this.dateLabel.set_text(now.toLocaleFormat(dateFormat));
+
+        this._displaysSection = new St.ScrollView({
+            style_class: "datemenu-displays-section vfade",
+            clip_to_allocation: true,
+	    x_expand: true,
         });
 
-        let dbox = new St.BoxLayout({
+        this._displaysSection.set_policy(St.PolicyType.NEVER, St.PolicyType.EXTERNAL);
+        vbox.add_child(this._displaysSection);
+
+        let displayBox = new St.BoxLayout({
             vertical: true,
+	        x_expand: true,
             style_class: "datemenu-displays-box"
         });
+        displayBox.add_child(this._eventsSection);
+        displayBox.add_child(this._clocksSection);
+        displayBox.add_child(this._weatherSection);
+        this._displaysSection.add_actor(displayBox);
+        vbox.add_child(this._date);
+        vbox.add_child(this._calendar);
 
-        displaySection.set_policy(St.PolicyType.NEVER, St.PolicyType.AUTOMATIC);
-
-        vbox.add_actor(this._date.actor);
-        vbox.add_actor(this._calendar.actor);
-        dbox.add(this._eventsSection.actor, {
-            x_fill: true
-        });
-        dbox.add(this._clocksSection.actor, {
-            x_fill: true
-        });
-        dbox.add(this._weatherSection.actor, {
-            x_fill: true
-        });
-
-        displaySection.add_actor(dbox);
-        vbox.add_actor(displaySection);
-        this.menu.box.add(vbox);
+        this.menu.box.add(hbox);
 
         this.menu.connect("open-state-changed", (menu, isOpen) => {
             if (isOpen) {
                 let now = new Date();
                 this._calendar.setDate(now);
                 this._eventsSection.setDate(now);
-                this._date.setDate(now);
+                this.dayLabel.set_text(now.toLocaleFormat('%A'));
+                let dateFormat = Shell.util_translate_time_string(N_("%B %-d %Y"));
+                this.dateLabel.set_text(now.toLocaleFormat(dateFormat));
+                //this._date.setDate(now);
             }
         });
         this._date_changed = this._calendar.connect(
@@ -113,9 +131,9 @@ var CalendarIndicator = new Lang.Class({
                 this._eventsSection.setDate(date);
             }
         );
-    },
+    }
 
-    override: function (format) {
+    override (format) {
         this.resetFormat();
         if (format == "") {
             return
@@ -129,39 +147,42 @@ var CalendarIndicator = new Lang.Class({
         this._clockIndicatorFormat.show();
         this._dateFormat = format;
         this.changeFormat();
-    },
-    changeFormat: function () {
+    }
+
+    changeFormat () {
         if (this._dateFormat && this._dateFormat != "") {
             let date = new Date();
             this._clockIndicatorFormat.set_text(date.toLocaleFormat(this._dateFormat));
         }
-    },
-    resetFormat: function () {
+    }
+
+    resetFormat () {
         if (this._formatChanged) {
             GLib.source_remove(this._formatChanged);
             this._formatChanged = null;
         }
         this._clockIndicator.show();
         this._clockIndicatorFormat.hide();
-    },
-    destroy: function () {
+    }
+
+    destroy () {
         this.resetFormat();
         this._calendar.disconnect(this._date_changed);
         
         this.box.remove_child(this._clockIndicator);
 
-        this._date.actor.get_parent().remove_child(this._date.actor);
-        this._calendar.actor.get_parent().remove_child(this._calendar.actor);
-        this._clocksSection.actor.get_parent().remove_child(this._clocksSection.actor);
-        this._weatherSection.actor.get_parent().remove_child(this._weatherSection.actor);
+        this._date.get_parent().remove_child(this._date);
+        this._calendar.get_parent().remove_child(this._calendar);
+        this._clocksSection.get_parent().remove_child(this._clocksSection);
+        this._weatherSection.get_parent().remove_child(this._weatherSection);
       
-        this._calendarParent.add_child(this._date.actor);
-        this._sectionParent.add_child(this._clocksSection.actor);
-        this._sectionParent.add_child(this._weatherSection.actor);
-        this._calendarParent.add_child(this._calendar.actor);
+        this._calendarParent.add_child(this._date);
+        this._sectionParent.add_child(this._clocksSection);
+        this._sectionParent.add_child(this._weatherSection);
+        this._calendarParent.add_child(this._calendar);
 
         this._indicatorParent.add_actor(this._clockIndicator);
 
-        this.parent();
+        super.destroy()
     }
 });

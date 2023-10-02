@@ -15,18 +15,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+const GObject = imports.gi.GObject;
 
-const Lang = imports.lang;
-var MenuItems = new Lang.Class({
-    Name: "MenuItems",
-    _init: function (settings) {
+var MenuItems = GObject.registerClass({
+    GTypeName: "MenuItems",
+},
+class MenuItems extends GObject.Object {
+    _init (settings) {
+	super._init();
         this.settings = settings;
-    },
-    getItems: function () {
+    }
+
+    getItems() {
         let itemsString = this.settings.get_string("items");
         return this.itemsToArray(itemsString);
-    },
-    itemsToArray: function (itemsString) {
+    }
+
+    itemsToArray(itemsString) {
         let items = itemsString.split("|");
         let itemsArray = new Array();
         for (let indexItem in items) {
@@ -40,8 +45,9 @@ var MenuItems = new Lang.Class({
             itemsArray.push(item);
         }
         return itemsArray;
-    },
-    changeOrder: function (index, posRel) {
+    }
+
+    changeOrder(index, posRel) {
         let items = this.getItems();
         if ((posRel < 0 && index > 0) || (posRel > 0 && index < (items.length - 1))) {
             let temp = items[index];
@@ -51,8 +57,9 @@ var MenuItems = new Lang.Class({
             return true;
         }
         return false;
-    },
-    changeEnable: function (index, value) {
+    }
+
+    changeEnable(index, value) {
         let items = this.getItems();
         if (index < 0 && index >= items.length) {
             return false;
@@ -60,8 +67,9 @@ var MenuItems = new Lang.Class({
         items[index]["enable"] = value;
         this.setItems(items);
         return true;
-    },
-    changePosition: function (index, value) {
+    }
+
+    changePosition(index, value) {
         let items = this.getItems();
         if (index < 0 && index >= items.length) {
             return false;
@@ -69,12 +77,14 @@ var MenuItems = new Lang.Class({
         items[index]["position"] = value;
         this.setItems(items);
         return true;
-    },
-    setItems: function (items) {
+    }
+
+    setItems(items) {
         let itemsString = this.itemsToString(items);
         this.settings.set_string("items", itemsString);
-    },
-    itemsToString: function (itemsArray) {
+    }
+
+    itemsToString(itemsArray) {
         let items = new Array()
         for (let indexItem in itemsArray) {
             let itemDatasArray = itemsArray[indexItem];
@@ -82,8 +92,9 @@ var MenuItems = new Lang.Class({
             items.push(itemDatasString);
         }
         return items.join("|");
-    },
-    getEnableItems: function () {
+    }
+
+    getEnableItems() {
         let items = this.getItems();
         let indexItem;
         let itemsEnable = new Array();
@@ -94,8 +105,9 @@ var MenuItems = new Lang.Class({
             }
         }
         return itemsEnable;
-    },
-    getCenterItems: function () {
+    }
+
+    getCenterItems() {
         let items = this.getItems();
         let indexItem;
         let itemsEnable = new Array();

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Lang = imports.lang;
+const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const Config = imports.misc.config;
 const ExtensionUtils = imports.misc.extensionUtils;
@@ -29,28 +29,30 @@ const CalendarIndicator = Me.imports.indicators.calendar.CalendarIndicator;
 const NetworkIndicator = Me.imports.indicators.network.NetworkIndicator;
 const BluetoothIndicator = Me.imports.indicators.bluetooth.BluetoothIndicator;
 const NightLightIndicator = Me.imports.indicators.nightlight.NightLightIndicator;
+const LightIndicator = Me.imports.indicators.light.LightIndicator;
 const NotificationIndicator = Me.imports.indicators.notification.NotificationIndicator;
 const PowerIndicator = Me.imports.indicators.power.PowerIndicator;
 const UserIndicator = Me.imports.indicators.system.UserIndicator;
 const VolumeIndicator = Me.imports.indicators.volume.VolumeIndicator;
 
 function init() {
-    Convenience.initTranslations("panel-indicators");
+    Convenience.initTranslations("bigSur-StatusArea");
 }
 
 let settings;
 let menuItems;
-let indicators;
+let indicators = null;
 let settingsChanged;
 
-let nightlight;
-let volume;
-let network;
-let bluetooth;
-let power;
-let calendar;
-let user;
-let notification;
+let light = null;
+let nightlight = null;
+let volume = null;
+let network = null;
+let bluetooth = null;
+let power = null;
+let calendar = null;
+let user = null;
+let notification = null;
 
 const CENTER_BOX = Main.panel._centerBox;
 const RIGHT_BOX = Main.panel._rightBox;
@@ -68,15 +70,26 @@ function enable() {
     notification = new NotificationIndicator();
     user = new UserIndicator();
     nightlight = new NightLightIndicator();
-
-    Main.panel.addToStatusArea(notification.name, notification, 0, "right");
-    Main.panel.addToStatusArea(user.name, user, 0, "right");
-    Main.panel.addToStatusArea(calendar.name, calendar, 0, "right");
-    Main.panel.addToStatusArea(power.name, power, 0, "right");
-    Main.panel.addToStatusArea(network.name, network, 0, "right");
-    Main.panel.addToStatusArea(bluetooth.name, bluetooth, 0, "right");
-    Main.panel.addToStatusArea(volume.name, volume, 0, "right");
-    Main.panel.addToStatusArea(nightlight.name, nightlight, 0, "right");
+    light = new LightIndicator();
+    
+    if (notification)
+       Main.panel.addToStatusArea(notification.name, notification, 0, "right");
+    if (user)
+       Main.panel.addToStatusArea(user.name, user, 0, "right");
+    if (calendar)
+       Main.panel.addToStatusArea(calendar.name, calendar, 0, "right");
+    if (power)
+       Main.panel.addToStatusArea(power.name, power, 0, "right");
+    if (network)
+       Main.panel.addToStatusArea(network.name, network, 0, "right");
+    if (bluetooth)
+       Main.panel.addToStatusArea(bluetooth.name, bluetooth, 0, "right");
+    if (bluetooth)
+       Main.panel.addToStatusArea(volume.name, volume, 0, "right");
+    if (nightlight)
+       Main.panel.addToStatusArea(nightlight.name, nightlight, 0, "right");
+    if (light)
+       Main.panel.addToStatusArea(light.name, light, 0, "right");
 
     // Load Settings
     settings = Convenience.getSettings();
@@ -87,6 +100,8 @@ function enable() {
     settingsChanged[i++] = settings.connect("changed::spacing", applySettings);
     settingsChanged[i++] = settings.connect("changed::user-icon", changeUsericon);
     settingsChanged[i++] = settings.connect("changed::date-format", changeDateformat);
+    settingsChanged[i++] = settings.connect("changed::activate-spacing", applySettings);
+    settingsChanged[i++] = settings.connect("changed::separate-date-and-notification", applySettings);
 
     applySettings();
     changeUsername();
@@ -120,14 +135,17 @@ function applySettings() {
     setup(enabled, center, indicators, "volume", volume);
     setup(enabled, center, indicators, "network", network);
     setup(enabled, center, indicators, "bluetooth", bluetooth);
-    setup(enabled, center, indicators, "notification", notification);
     setup(enabled, center, indicators, "calendar", calendar);
+    setup(enabled, center, indicators, "notification", notification);
     setup(enabled, center, indicators, "nightlight", nightlight);
+    setup(enabled, center, indicators, "light", light);
 
     let rightchildren = RIGHT_BOX.get_children().length;
     let centerchildren = CENTER_BOX.get_children().length;
 
     let spacing = settings.get_int("spacing");
+    if (!settings.get_boolean("activate-spacing"))
+	spacing = -1;
 
     indicators.reverse().forEach(function (item) {
         item.set_spacing(spacing);
@@ -141,6 +159,7 @@ function applySettings() {
 }
 
 function setup(enabledItems, centerItems, arrayIndicators, name, indicator) {
+    if (!indicator) return;
     let index = enabledItems.indexOf(name);
     let valid = index != -1;
     if (valid) {
@@ -150,6 +169,7 @@ function setup(enabledItems, centerItems, arrayIndicators, name, indicator) {
 }
 
 function removeAll() {
+    removeContainer(light);
     removeContainer(nightlight);
     removeContainer(volume);
     removeContainer(network);
@@ -161,6 +181,7 @@ function removeAll() {
 }
 
 function removeContainer(item) {
+    if (!item) return;
     if (item._center) {
         CENTER_BOX.remove_child(item.container)
     } else {
@@ -176,6 +197,7 @@ function disable() {
     settingsChanged = null;
     settings = null;
 
+    light.destroy();
     nightlight.destroy();
     volume.destroy();
     power.destroy();
